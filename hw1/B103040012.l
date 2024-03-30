@@ -7,7 +7,7 @@ unsigned long _line = 1, _pos = 1;
 
 void inform(unsigned long l, unsigned long p, const char* token, const char* type);
 %}
-reserved_word absolute|and|begin|break|case|const|continue|do|else|end|for|function|if|mod|nil|not|object|of|or|program|then|to|var|while|array|integer|double|write|writeln|string|float|read
+reserved_word absolute|and|begin|break|case|const|continue|do|else|end|for|function|if|mod|nil|not|object|of|or|program|then|to|var|while|array|integer|double|write|writeln|string|float|read|real|single|byte|longint|word|longword|shortint|cardinal
 
 id [A-Za-z_][_[:alnum:]]{0,14}
 int [+-]?[0-9]+
@@ -108,6 +108,11 @@ noncomment {incompleted_comments}
     {comment_begin} {
         yymore();
         BEGIN(COMMENT_STATE);
+    }
+
+    {comment_end} {
+        inform(_line, _pos, yytext, "non-comment");
+        _pos += yyleng;
     }
 
     {string} {
