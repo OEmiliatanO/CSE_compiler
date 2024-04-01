@@ -10,9 +10,10 @@ void inform(unsigned long l, unsigned long p, const char* token, const char* typ
 reserved_word absolute|and|begin|break|case|const|continue|do|else|end|for|function|if|mod|nil|not|object|of|or|program|then|to|var|while|array|integer|double|write|writeln|string|float|read|real|single|byte|longint|word|longword|shortint|cardinal
 
 id [A-Za-z_][_[:alnum:]]{0,14}
+unsigned [0-9]+
 int [+-]?[0-9]+
-frac [0-9]+
-float [+-]?{int}(\.{frac})?([eE]{int})?
+float_without_exp {int}(\.{unsigned})?
+float {float_without_exp}([eE]{int})?
 string \'([^\'\r\n]|\'\'){0,30}\'
 comment_begin "(*"
 comment_content [^*\n]*|"*"+[^*)\n]*
@@ -49,19 +50,23 @@ newline \r?\n
 space [\t\ ]
 
 id_over_len_limit [A-Za-z_][_[:alnum:]]{15,}
-id_wrong_starting [0-9\^#][_[:alnum:]]*
+id_wrong_starting [0-9^#][_[:alnum:]]*
 nonid {id_over_len_limit}|{id_wrong_starting}
 
-string_dquote \"([^\'\r\n]|\'\')?\"
+string_dquote \"([^\'\r\n]|\'\')*\"
+incompleted_string_dquote \"[^;\r\n\ ]*|[^;\r\n\ ]*\"
 incompleted_string \'[^';\r\n\ ]*|[^';\r\n\ ]*\'
 string_over_len_limit \'([^\'\r\n]|\'\'){31,}\'
 string_with_wrong_quote \'([^\'\r\n]*\'[^\'\r\n]*)+\'
 nonstring {incompleted_string}|{string_over_len_limit}|{string_with_wrong_quote}|{string_dquote}
 
-float_without_frac [+-]?{int}(\.)+([eE]{int})?
-float_without_int [+-]?(\.{frac})+([eE]{int})?
-float_with_e_frac [+-]?{int}(\.{frac})?([eE][+-]?{int}?\.{frac})
-nonfloat {float_without_frac}|{float_without_int}|{float_with_e_frac}
+float_without_frac_exp {int}\.
+float_without_frac {float_without_frac_exp}([eE]{int})?
+float_without_int_exp [+-]?\.{unsigned}
+float_without_int {float_without_int_exp}([eE]{int})?
+float_with_e_frac ({float_without_frac_exp}|{float_without_int_exp}|{float_without_exp})([eE]({float_without_frac_exp}|{float_without_int_exp}|{float_without_exp}))+
+float_with_multi_frac {int}(\.{unsigned}?([eE]({float_without_frac_exp}|{float_without_int_exp}|{float_without_exp}))?){2,}
+nonfloat {float_without_frac}|{float_without_int}|{float_with_e_frac}|{float_with_multi_frac}
 
 incompleted_comments "(*)"
 noncomment {incompleted_comments}
