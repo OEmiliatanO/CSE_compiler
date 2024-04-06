@@ -271,6 +271,7 @@ noncomment {incompleted_comments}
         _pos += yyleng;
     }
 
+    /*
     {string_with_wrong_quote} {
         char type[50] = "invalid string";
         color(KRED, type);
@@ -281,6 +282,7 @@ noncomment {incompleted_comments}
         inform(_line, _pos, yytext, type, complement);
         _pos += yyleng;
     }
+    */
 
     /*
     {nonstring} {
