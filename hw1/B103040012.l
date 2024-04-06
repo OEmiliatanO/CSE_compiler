@@ -64,7 +64,7 @@ newline \r?\n
 space [\t\ ]
 
 id_over_len_limit [A-Za-z_][_[:alnum:]]{15,}
-id_wrong_starting [0-9^#%$][_[:alnum:]]*
+id_wrong_starting [0-9^#%$][_[:alnum:]^#%$]*
 nonid {id_over_len_limit}|{id_wrong_starting}
 
 string_dquote \"([^\'\r\n]|\'\')*\"
