@@ -10,7 +10,7 @@ LIB_OBJ:=symbol_table.o
 STATIC_LIB:=symbol_table.a
 
 lex: ${SRC}
-	${LEX} -o lex.c ${SRC}
+	${LEX} -i -o lex.c ${SRC}
 	${CC} -c lex.c
 	${CXX} lex.o ${STATIC_LIB} -lfl -o lex.elf
 
