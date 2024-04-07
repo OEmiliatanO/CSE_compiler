@@ -808,8 +808,6 @@ char *yytext;
 #include <stdio.h>
 #include <stdlib.h>
 #include <ctype.h>
-#include <sys/types.h>
-#include <regex.h>
 #include "symbol_table.h"
 
 #define KNRM  "\x1B[0m"
@@ -825,7 +823,7 @@ unsigned long _line = 1, _pos = 1;
 
 void inform(unsigned long l, unsigned long p, const char* token, const char* type, const char* complement);
 void color(const char* c, char* s);
-#line 829 "lex.c"
+#line 827 "lex.c"
 /* float [+-]?[0-9]+(\.[0-9]+)?([eE][+-]?[0-9]+)? */
 /*comments \(\*({comments}|.|\r?\n)?\*\)*/
 /* flex cannot “balance” parentheses to an arbitrary degree: https://www.cs.virginia.edu/~cr4bd/flex-manual/Does-flex-support-recursive-pattern-definitions_003f.html */
@@ -833,7 +831,7 @@ void color(const char* c, char* s);
 /* incompleted_string \'[^)';\r\n\ ]*|[^(';\r\n\ ]*\' */
 /* float_with_multi_frac {int}(\.{unsigned}?([eE]({float_without_frac_exp}|{float_without_int_exp}|{float_without_exp}))?){2,} */
 
-#line 837 "lex.c"
+#line 835 "lex.c"
 
 #define INITIAL 0
 #define COMMENT_STATE 1
@@ -1052,10 +1050,10 @@ YY_DECL
 		}
 
 	{
-#line 91 "B103040012.l"
+#line 89 "B103040012.l"
 
 
-#line 1059 "lex.c"
+#line 1057 "lex.c"
 
 	while ( /*CONSTCOND*/1 )		/* loops until end-of-file is reached */
 		{
@@ -1121,7 +1119,7 @@ do_action:	/* This label is used only to access EOF actions. */
 case 1:
 /* rule 1 can match eol */
 YY_RULE_SETUP
-#line 94 "B103040012.l"
+#line 92 "B103040012.l"
 {
         ++_line;
         _pos = 1;
@@ -1129,14 +1127,14 @@ YY_RULE_SETUP
 	YY_BREAK
 case 2:
 YY_RULE_SETUP
-#line 99 "B103040012.l"
+#line 97 "B103040012.l"
 {
         _pos += yyleng;
     }
 	YY_BREAK
 case 3:
 YY_RULE_SETUP
-#line 103 "B103040012.l"
+#line 101 "B103040012.l"
 {
         char type[50] = "reserved word";
         color(KGRN, type);
@@ -1147,7 +1145,7 @@ YY_RULE_SETUP
 	YY_BREAK
 case 4:
 YY_RULE_SETUP
-#line 111 "B103040012.l"
+#line 109 "B103040012.l"
 {
         char type[50] = "identity";
         color(KYEL, type);
@@ -1159,7 +1157,7 @@ YY_RULE_SETUP
 	YY_BREAK
 case 5:
 YY_RULE_SETUP
-#line 120 "B103040012.l"
+#line 118 "B103040012.l"
 {
         inform(_line, _pos, yytext, "integer", "");
         _pos += yyleng;
@@ -1220,7 +1218,7 @@ YY_RULE_SETUP
     */
 case 6:
 YY_RULE_SETUP
-#line 180 "B103040012.l"
+#line 178 "B103040012.l"
 {
         inform(_line, _pos, yytext, "float", "");
         _pos += yyleng;
@@ -1229,7 +1227,7 @@ YY_RULE_SETUP
 	YY_BREAK
 case 7:
 YY_RULE_SETUP
-#line 186 "B103040012.l"
+#line 184 "B103040012.l"
 {
         inform(_line, _pos, yytext, "symbol", "");
         _pos += yyleng;
@@ -1237,7 +1235,7 @@ YY_RULE_SETUP
 	YY_BREAK
 case 8:
 YY_RULE_SETUP
-#line 191 "B103040012.l"
+#line 189 "B103040012.l"
 {
         yymore();
         BEGIN(COMMENT_STATE);
@@ -1245,7 +1243,7 @@ YY_RULE_SETUP
 	YY_BREAK
 case 9:
 YY_RULE_SETUP
-#line 196 "B103040012.l"
+#line 194 "B103040012.l"
 {
         char type[50] = "incompleted comment";
         color(KRED, type);
@@ -1259,7 +1257,7 @@ YY_RULE_SETUP
 	YY_BREAK
 case 10:
 YY_RULE_SETUP
-#line 207 "B103040012.l"
+#line 205 "B103040012.l"
 {
         inform(_line, _pos, yytext, "string", "");
         _pos += yyleng;
@@ -1267,7 +1265,7 @@ YY_RULE_SETUP
 	YY_BREAK
 case 11:
 YY_RULE_SETUP
-#line 212 "B103040012.l"
+#line 210 "B103040012.l"
 {
         char type[50] = "invalid identity";
         color(KRED, type);
@@ -1281,7 +1279,7 @@ YY_RULE_SETUP
 	YY_BREAK
 case 12:
 YY_RULE_SETUP
-#line 223 "B103040012.l"
+#line 221 "B103040012.l"
 {
         char type[50] = "invalid identity";
         color(KRED, type);
@@ -1301,7 +1299,7 @@ YY_RULE_SETUP
     */
 case 13:
 YY_RULE_SETUP
-#line 241 "B103040012.l"
+#line 239 "B103040012.l"
 {
         char type[50] = "invalid string";
         color(KRED, type);
@@ -1344,7 +1342,7 @@ YY_RULE_SETUP
     */
 case 14:
 YY_RULE_SETUP
-#line 283 "B103040012.l"
+#line 281 "B103040012.l"
 {
         char type[50] = "invalid string";
         color(KRED, type);
@@ -1358,7 +1356,7 @@ YY_RULE_SETUP
 	YY_BREAK
 case 15:
 YY_RULE_SETUP
-#line 295 "B103040012.l"
+#line 293 "B103040012.l"
 {
         char type[50] = "invalid string";
         color(KRED, type);
@@ -1378,7 +1376,7 @@ YY_RULE_SETUP
     */
 case 16:
 YY_RULE_SETUP
-#line 313 "B103040012.l"
+#line 311 "B103040012.l"
 {
         char type[50] = "invalid float type";
         color(KRED, type);
@@ -1392,7 +1390,7 @@ YY_RULE_SETUP
 	YY_BREAK
 case 17:
 YY_RULE_SETUP
-#line 324 "B103040012.l"
+#line 322 "B103040012.l"
 {
         char type[50] = "invalid float type";
         color(KRED, type);
@@ -1406,7 +1404,7 @@ YY_RULE_SETUP
 	YY_BREAK
 case 18:
 YY_RULE_SETUP
-#line 335 "B103040012.l"
+#line 333 "B103040012.l"
 {
         char type[50] = "invalid float type";
         color(KRED, type);
@@ -1438,7 +1436,7 @@ YY_RULE_SETUP
     */
 case 19:
 YY_RULE_SETUP
-#line 365 "B103040012.l"
+#line 363 "B103040012.l"
 {
         char type[50] = "incompleted comment";
         color(KRED, type);
@@ -1458,7 +1456,7 @@ YY_RULE_SETUP
     */
 case 20:
 YY_RULE_SETUP
-#line 383 "B103040012.l"
+#line 381 "B103040012.l"
 {
         char type[50] = "error";
         color(KRED, type);
@@ -1471,7 +1469,7 @@ YY_RULE_SETUP
 
 case 21:
 YY_RULE_SETUP
-#line 393 "B103040012.l"
+#line 391 "B103040012.l"
 {
         _pos += yyleng;
         yymore();
@@ -1480,7 +1478,7 @@ YY_RULE_SETUP
 case 22:
 /* rule 22 can match eol */
 YY_RULE_SETUP
-#line 398 "B103040012.l"
+#line 396 "B103040012.l"
 {
         ++_line;
         _pos = 1;
@@ -1489,7 +1487,7 @@ YY_RULE_SETUP
 	YY_BREAK
 case 23:
 YY_RULE_SETUP
-#line 404 "B103040012.l"
+#line 402 "B103040012.l"
 {
         inform(_line, _pos, yytext, "comment", "");
         BEGIN(INITIAL);
@@ -1499,7 +1497,7 @@ YY_RULE_SETUP
 
 case 24:
 YY_RULE_SETUP
-#line 411 "B103040012.l"
+#line 409 "B103040012.l"
 {
         inform(_line, _pos, yytext, "symbol", "");
         _pos += yyleng;
@@ -1508,7 +1506,7 @@ YY_RULE_SETUP
 	YY_BREAK
 case 25:
 YY_RULE_SETUP
-#line 417 "B103040012.l"
+#line 415 "B103040012.l"
 {
         yyless(0);
         BEGIN(INITIAL);
@@ -1517,10 +1515,10 @@ YY_RULE_SETUP
 
 case 26:
 YY_RULE_SETUP
-#line 423 "B103040012.l"
+#line 421 "B103040012.l"
 ECHO;
 	YY_BREAK
-#line 1524 "lex.c"
+#line 1522 "lex.c"
 case YY_STATE_EOF(INITIAL):
 case YY_STATE_EOF(COMMENT_STATE):
 case YY_STATE_EOF(NUMERIC_STATE):
@@ -2527,7 +2525,7 @@ void yyfree (void * ptr )
 
 #define YYTABLES_NAME "yytables"
 
-#line 423 "B103040012.l"
+#line 421 "B103040012.l"
 
 
 void color(const char* c, char* s)
