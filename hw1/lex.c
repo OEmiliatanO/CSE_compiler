@@ -2133,7 +2133,7 @@ case 27:
 YY_RULE_SETUP
 #line 408 "B103040012.l"
 {
-        yymore();
+        yyless(0);
         BEGIN(INITIAL);
     }
 	YY_BREAK

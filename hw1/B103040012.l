@@ -406,7 +406,7 @@ noncomment {incompleted_comments}
     }
     
     . {
-        yymore();
+        yyless(0);
         BEGIN(INITIAL);
     }
 }
