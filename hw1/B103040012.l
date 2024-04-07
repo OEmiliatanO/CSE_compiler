@@ -60,6 +60,7 @@ bitnot \~
 shiftr \>\>
 shiftl \<\<
 symbols {comma}|{semicolon}|{colon}|{round_bracket}|{define}|{ge}|{le}|{eq}|{eqq}|{geq}|{leq}|{square_bracket}|{sub}|{mul}|{div}|{period}|{curly_bracket}|{ne}|{bitand}|{bitnot}|{shiftr}|{shiftl}
+op_symbols {ge}|{le}|{eq}|{eqq}|{geq}|{leq}|{plus}|{sub}|{mul}|{div}|{ne}|{bitand}|{bitor}|{bitnot}|{shiftr}|{shiftl}
 newline \r?\n
 space [\t\ ]
 
@@ -86,6 +87,7 @@ incompleted_comments "(*)"
 noncomment {incompleted_comments}
 
 %s COMMENT_STATE
+%s NUMERIC_STATE
 %%
 
 <INITIAL>{
@@ -115,6 +117,13 @@ noncomment {incompleted_comments}
         insert(yytext);
     }
 
+    {int} {
+        inform(_line, _pos, yytext, "integer", "");
+        _pos += yyleng;
+        BEGIN(NUMERIC_STATE);
+    }
+    
+    /*
     ({int}[\+\-\*\/]{int}) {
         regex_t preg;
         regcomp(&preg, "[+-]?[0-9]+", REG_EXTENDED);
@@ -139,13 +148,10 @@ noncomment {incompleted_comments}
         regfree(&preg);
 
     }
-
-    {int} {
-        inform(_line, _pos, yytext, "integer", "");
-        _pos += yyleng;
-    }
+    */
 
     /* float [+-]?[0-9]+(\.[0-9]+)?([eE][+-]?[0-9]+)? */
+    /*
     ({float}[\+\-\*\/]{float}) {
         regex_t preg;
         regcomp(&preg, "[+-]?[0-9]+(\\.[0-9]+)?([eE][+-]?[0-9]+)?", REG_EXTENDED);
@@ -169,10 +175,12 @@ noncomment {incompleted_comments}
         _pos += 1;
         regfree(&preg);
     }
+    */
 
     {float} {
         inform(_line, _pos, yytext, "float", "");
         _pos += yyleng;
+        BEGIN(NUMERIC_STATE);
     }
 
     {symbols} {
@@ -386,6 +394,19 @@ noncomment {incompleted_comments}
 
     {comment_end} {
         inform(_line, _pos, yytext, "comment", "");
+        BEGIN(INITIAL);
+    }
+}
+
+<NUMERIC_STATE>{
+    {op_symbols} {
+        inform(_line, _pos, yytext, "symbol", "");
+        _pos += yyleng;
+        BEGIN(INITIAL);
+    }
+    
+    . {
+        yymore();
         BEGIN(INITIAL);
     }
 }
