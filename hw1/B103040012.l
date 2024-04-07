@@ -69,19 +69,19 @@ id_wrong_starting [0-9^#%$][_[:alnum:]^#%$]*
 nonid {id_over_len_limit}|{id_wrong_starting}
 
 string_dquote \"([^\'\r\n]|\'\')*\"
-incompleted_string_dquote \"[^;\r\n\ ]*|[^;\r\n\ ]*\"
-incompleted_string \'[^';\r\n\ ]*|[^';\r\n\ ]*\'
+/* incompleted_string_dquote \"[^;\r\n\ ]*|[^;\r\n\ ]*\" */
+/* incompleted_string \'[^)';\r\n\ ]*|[^(';\r\n\ ]*\' */
 string_over_len_limit \'([^\'\r\n]|\'\'){31,}\'
-string_with_wrong_quote \'([^\'\r\n]*\'[^\'\r\n]*)+\'
-nonstring {incompleted_string}|{string_over_len_limit}|{string_with_wrong_quote}|{string_dquote}
+string_non_terminated_quote \'[^\'\r\n]*
+nonstring {string_over_len_limit}|{string_dquote}
 
 float_without_frac_exp {int}\.
 float_without_frac {float_without_frac_exp}([eE]{int})?
 float_without_int_exp [+-]?\.{unsigned}
 float_without_int {float_without_int_exp}([eE]{int})?
 float_with_e_frac ({float_without_frac_exp}|{float_without_int_exp}|{float_without_exp})([eE]({float_without_frac_exp}|{float_without_int_exp}|{float_without_exp}))+
-float_with_multi_frac {int}(\.{unsigned}?([eE]({float_without_frac_exp}|{float_without_int_exp}|{float_without_exp}))?){2,}
-nonfloat {float_without_frac}|{float_without_int}|{float_with_e_frac}|{float_with_multi_frac}
+/* float_with_multi_frac {int}(\.{unsigned}?([eE]({float_without_frac_exp}|{float_without_int_exp}|{float_without_exp}))?){2,} */
+nonfloat {float_without_frac}|{float_without_int}|{float_with_e_frac}
 
 incompleted_comments "(*)"
 noncomment {incompleted_comments}
@@ -249,6 +249,7 @@ noncomment {incompleted_comments}
         _pos += yyleng;
     }
 
+    /*
     {incompleted_string_dquote} {
         char type[50] = "invalid string";
         color(KRED, type);
@@ -259,6 +260,13 @@ noncomment {incompleted_comments}
         inform(_line, _pos, yytext, type, complement);
         _pos += yyleng;
     }
+    */
+
+    /*
+    i found that gcc does not detect incomplete string: 
+    for example, string like 
+    ab" 
+    will be determined as identity and non-terminated quote.
 
     {incompleted_string} {
         char type[50] = "invalid string";
@@ -270,6 +278,7 @@ noncomment {incompleted_comments}
         inform(_line, _pos, yytext, type, complement);
         _pos += yyleng;
     }
+    */
 
     {string_over_len_limit} {
         char type[50] = "invalid string";
@@ -282,18 +291,17 @@ noncomment {incompleted_comments}
         _pos += yyleng;
     }
 
-    /*
-    {string_with_wrong_quote} {
+    
+    {string_non_terminated_quote} {
         char type[50] = "invalid string";
         color(KRED, type);
 
         char complement[100];
-        sprintf(complement, "Cannot match the %ssingle quotation marks%s.", KRED, KWHT);
+        sprintf(complement, "\n%5lu | %sERROR:%s missing terminating ' character.", _line, KRED, KWHT);
 
         inform(_line, _pos, yytext, type, complement);
         _pos += yyleng;
     }
-    */
 
     /*
     {nonstring} {
@@ -335,6 +343,7 @@ noncomment {incompleted_comments}
         _pos += yyleng;
     }
 
+    /*
     {float_with_multi_frac} {
         char type[50] = "invalid float type";
         color(KRED, type);
@@ -344,8 +353,8 @@ noncomment {incompleted_comments}
 
         inform(_line, _pos, yytext, type, complement);
         _pos += yyleng;
-
     }
+    */
 
     /*
     {nonfloat} {
@@ -354,7 +363,7 @@ noncomment {incompleted_comments}
     }
     */
     {incompleted_comments} {
-        char type[50] = "invalid comment";
+        char type[50] = "incompleted comment";
         color(KRED, type);
 
         char complement[100];
