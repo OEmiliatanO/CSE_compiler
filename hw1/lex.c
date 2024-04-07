@@ -1893,13 +1893,16 @@ YY_RULE_SETUP
         char type[50] = "incompleted comment";
         color(KRED, type);
 
-        inform(_line, _pos, yytext, type, "");
+        char complement[100];
+        sprintf(complement, "\n%5lu | %sERROR:%s The comment is incompleted.", _line, KRED, KWHT);
+
+        inform(_line, _pos, yytext, type, complement);
         _pos += yyleng;
     }
 	YY_BREAK
 case 12:
 YY_RULE_SETUP
-#line 196 "B103040012.l"
+#line 199 "B103040012.l"
 {
         inform(_line, _pos, yytext, "string", "");
         _pos += yyleng;
@@ -1907,13 +1910,13 @@ YY_RULE_SETUP
 	YY_BREAK
 case 13:
 YY_RULE_SETUP
-#line 201 "B103040012.l"
+#line 204 "B103040012.l"
 {
         char type[50] = "invalid identity";
         color(KRED, type);
 
         char complement[100];
-        sprintf(complement, "The length exceeds the %smaximum length%s.", KRED, KWHT);
+        sprintf(complement, "\n%5lu | %sERROR:%s The length exceeds the maximum length.", _line, KRED, KWHT);
 
         inform(_line, _pos, yytext, type, complement);
         _pos += yyleng;
@@ -1921,13 +1924,13 @@ YY_RULE_SETUP
 	YY_BREAK
 case 14:
 YY_RULE_SETUP
-#line 212 "B103040012.l"
+#line 215 "B103040012.l"
 {
         char type[50] = "invalid identity";
         color(KRED, type);
 
         char complement[100];
-        sprintf(complement, "Starts with the invalid character: %s%c%s.", KRED, yytext[0], KWHT);
+        sprintf(complement, "\n%5lu | %sERROR:%s Starts with the invalid character: %s%c%s.", _line, KRED, KWHT, KRED, yytext[0], KWHT);
 
         inform(_line, _pos, yytext, type, complement);
         _pos += yyleng;
@@ -1941,13 +1944,13 @@ YY_RULE_SETUP
     */
 case 15:
 YY_RULE_SETUP
-#line 230 "B103040012.l"
+#line 233 "B103040012.l"
 {
         char type[50] = "invalid string";
         color(KRED, type);
 
         char complement[100];
-        sprintf(complement, "Using %sdouble quotation marks (\")%s.", KRED, KWHT);
+        sprintf(complement, "\n%5lu | %sERROR:%s Using double quotation marks (\").", _line, KRED, KWHT);
 
         inform(_line, _pos, yytext, type, complement);
         _pos += yyleng;
@@ -1955,13 +1958,13 @@ YY_RULE_SETUP
 	YY_BREAK
 case 16:
 YY_RULE_SETUP
-#line 241 "B103040012.l"
+#line 244 "B103040012.l"
 {
         char type[50] = "invalid string";
         color(KRED, type);
         
         char complement[100];
-        sprintf(complement, "%sIncompleted string%s with %sdouble quotation marks (\")%s.", KRED, KWHT, KRED, KWHT);
+        sprintf(complement, "\n%5lu | %sERROR:%s Incompleted string with double quotation marks (\").", _line, KRED, KWHT);
 
         inform(_line, _pos, yytext, type, complement);
         _pos += yyleng;
@@ -1969,13 +1972,13 @@ YY_RULE_SETUP
 	YY_BREAK
 case 17:
 YY_RULE_SETUP
-#line 252 "B103040012.l"
+#line 255 "B103040012.l"
 {
         char type[50] = "invalid string";
         color(KRED, type);
 
         char complement[100];
-        sprintf(complement, "%sIncompleted string%s.", KRED, KWHT);
+        sprintf(complement, "\n%5lu | %sERROR:%s Incompleted string.", _line, KRED, KWHT);
 
         inform(_line, _pos, yytext, type, complement);
         _pos += yyleng;
@@ -1983,13 +1986,13 @@ YY_RULE_SETUP
 	YY_BREAK
 case 18:
 YY_RULE_SETUP
-#line 263 "B103040012.l"
+#line 266 "B103040012.l"
 {
         char type[50] = "invalid string";
         color(KRED, type);
 
         char complement[100];
-        sprintf(complement, "The length exceeds the %smaximum length%s.", KRED, KWHT);
+        sprintf(complement, "\n%5lu | %sERROR:%s The length exceeds the maximum length.", _line, KRED, KWHT);
 
         inform(_line, _pos, yytext, type, complement);
         _pos += yyleng;
@@ -2015,13 +2018,13 @@ YY_RULE_SETUP
     */
 case 19:
 YY_RULE_SETUP
-#line 294 "B103040012.l"
+#line 297 "B103040012.l"
 {
         char type[50] = "invalid float type";
         color(KRED, type);
 
         char complement[100];
-        sprintf(complement, "The %sfraction%s is missing.", KRED, KWHT);
+        sprintf(complement, "\n%5lu | %sERROR:%s The fraction is missing.", _line, KRED, KWHT);
 
         inform(_line, _pos, yytext, type, complement);
         _pos += yyleng;
@@ -2029,13 +2032,13 @@ YY_RULE_SETUP
 	YY_BREAK
 case 20:
 YY_RULE_SETUP
-#line 305 "B103040012.l"
+#line 308 "B103040012.l"
 {
         char type[50] = "invalid float type";
         color(KRED, type);
 
         char complement[100];
-        sprintf(complement, "The %sinteger%s is missing.", KRED, KWHT);
+        sprintf(complement, "\n%5lu | %sERROR:%s The integer is missing.", _line, KRED, KWHT);
 
         inform(_line, _pos, yytext, type, complement);
         _pos += yyleng;
@@ -2043,13 +2046,13 @@ YY_RULE_SETUP
 	YY_BREAK
 case 21:
 YY_RULE_SETUP
-#line 316 "B103040012.l"
+#line 319 "B103040012.l"
 {
         char type[50] = "invalid float type";
         color(KRED, type);
 
         char complement[100];
-        sprintf(complement, "The %sexponential part%s cannot have fraction.", KRED, KWHT);
+        sprintf(complement, "\n%5lu | %sERROR:%s The exponential part cannot have fraction.", _line, KRED, KWHT);
 
         inform(_line, _pos, yytext, type, complement);
         _pos += yyleng;
@@ -2057,13 +2060,13 @@ YY_RULE_SETUP
 	YY_BREAK
 case 22:
 YY_RULE_SETUP
-#line 327 "B103040012.l"
+#line 330 "B103040012.l"
 {
         char type[50] = "invalid float type";
         color(KRED, type);
 
         char complement[100];
-        sprintf(complement, "This float contains %smultiple fraction%s.", KRED, KWHT);
+        sprintf(complement, "\n%5lu | %sERROR:%s This float contains multiple fractions.", _line, KRED, KWHT);
 
         inform(_line, _pos, yytext, type, complement);
         _pos += yyleng;
@@ -2078,18 +2081,27 @@ YY_RULE_SETUP
     */
 case 23:
 YY_RULE_SETUP
-#line 346 "B103040012.l"
+#line 348 "B103040012.l"
 {
+        char type[50] = "invalid comment";
+        color(KRED, type);
+
+        char complement[100];
+        sprintf(complement, "\n%5lu | %sERROR:%s The comment is incompleted.", _line, KRED, KWHT);
+    }
+	YY_BREAK
+/*
+    {noncomment} {
         char type[50] = "invalid comment";
         color(KRED, type);
 
         inform(_line, _pos, yytext, "invalid comment", "");
         _pos += yyleng;
     }
-	YY_BREAK
+    */
 case 24:
 YY_RULE_SETUP
-#line 354 "B103040012.l"
+#line 366 "B103040012.l"
 {
         char type[50] = "error";
         color(KRED, type);
@@ -2102,7 +2114,7 @@ YY_RULE_SETUP
 
 case 25:
 YY_RULE_SETUP
-#line 364 "B103040012.l"
+#line 376 "B103040012.l"
 {
         _pos += yyleng;
         yymore();
@@ -2111,7 +2123,7 @@ YY_RULE_SETUP
 case 26:
 /* rule 26 can match eol */
 YY_RULE_SETUP
-#line 369 "B103040012.l"
+#line 381 "B103040012.l"
 {
         ++_line;
         _pos = 1;
@@ -2120,7 +2132,7 @@ YY_RULE_SETUP
 	YY_BREAK
 case 27:
 YY_RULE_SETUP
-#line 375 "B103040012.l"
+#line 387 "B103040012.l"
 {
         inform(_line, _pos, yytext, "comment", "");
         BEGIN(INITIAL);
@@ -2129,10 +2141,10 @@ YY_RULE_SETUP
 
 case 28:
 YY_RULE_SETUP
-#line 381 "B103040012.l"
+#line 393 "B103040012.l"
 ECHO;
 	YY_BREAK
-#line 2136 "lex.c"
+#line 2148 "lex.c"
 case YY_STATE_EOF(INITIAL):
 case YY_STATE_EOF(COMMENT_STATE):
 	yyterminate();
@@ -3138,7 +3150,7 @@ void yyfree (void * ptr )
 
 #define YYTABLES_NAME "yytables"
 
-#line 381 "B103040012.l"
+#line 393 "B103040012.l"
 
 
 void color(const char* c, char* s)

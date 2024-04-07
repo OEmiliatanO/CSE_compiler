@@ -189,7 +189,10 @@ noncomment {incompleted_comments}
         char type[50] = "incompleted comment";
         color(KRED, type);
 
-        inform(_line, _pos, yytext, type, "");
+        char complement[100];
+        sprintf(complement, "\n%5lu | %sERROR:%s The comment is incompleted.", _line, KRED, KWHT);
+
+        inform(_line, _pos, yytext, type, complement);
         _pos += yyleng;
     }
 
@@ -203,7 +206,7 @@ noncomment {incompleted_comments}
         color(KRED, type);
 
         char complement[100];
-        sprintf(complement, "The length exceeds the %smaximum length%s.", KRED, KWHT);
+        sprintf(complement, "\n%5lu | %sERROR:%s The length exceeds the maximum length.", _line, KRED, KWHT);
 
         inform(_line, _pos, yytext, type, complement);
         _pos += yyleng;
@@ -214,7 +217,7 @@ noncomment {incompleted_comments}
         color(KRED, type);
 
         char complement[100];
-        sprintf(complement, "Starts with the invalid character: %s%c%s.", KRED, yytext[0], KWHT);
+        sprintf(complement, "\n%5lu | %sERROR:%s Starts with the invalid character: %s%c%s.", _line, KRED, KWHT, KRED, yytext[0], KWHT);
 
         inform(_line, _pos, yytext, type, complement);
         _pos += yyleng;
@@ -232,7 +235,7 @@ noncomment {incompleted_comments}
         color(KRED, type);
 
         char complement[100];
-        sprintf(complement, "Using %sdouble quotation marks (\")%s.", KRED, KWHT);
+        sprintf(complement, "\n%5lu | %sERROR:%s Using double quotation marks (\").", _line, KRED, KWHT);
 
         inform(_line, _pos, yytext, type, complement);
         _pos += yyleng;
@@ -243,7 +246,7 @@ noncomment {incompleted_comments}
         color(KRED, type);
         
         char complement[100];
-        sprintf(complement, "%sIncompleted string%s with %sdouble quotation marks (\")%s.", KRED, KWHT, KRED, KWHT);
+        sprintf(complement, "\n%5lu | %sERROR:%s Incompleted string with double quotation marks (\").", _line, KRED, KWHT);
 
         inform(_line, _pos, yytext, type, complement);
         _pos += yyleng;
@@ -254,7 +257,7 @@ noncomment {incompleted_comments}
         color(KRED, type);
 
         char complement[100];
-        sprintf(complement, "%sIncompleted string%s.", KRED, KWHT);
+        sprintf(complement, "\n%5lu | %sERROR:%s Incompleted string.", _line, KRED, KWHT);
 
         inform(_line, _pos, yytext, type, complement);
         _pos += yyleng;
@@ -265,7 +268,7 @@ noncomment {incompleted_comments}
         color(KRED, type);
 
         char complement[100];
-        sprintf(complement, "The length exceeds the %smaximum length%s.", KRED, KWHT);
+        sprintf(complement, "\n%5lu | %sERROR:%s The length exceeds the maximum length.", _line, KRED, KWHT);
 
         inform(_line, _pos, yytext, type, complement);
         _pos += yyleng;
@@ -296,7 +299,7 @@ noncomment {incompleted_comments}
         color(KRED, type);
 
         char complement[100];
-        sprintf(complement, "The %sfraction%s is missing.", KRED, KWHT);
+        sprintf(complement, "\n%5lu | %sERROR:%s The fraction is missing.", _line, KRED, KWHT);
 
         inform(_line, _pos, yytext, type, complement);
         _pos += yyleng;
@@ -307,7 +310,7 @@ noncomment {incompleted_comments}
         color(KRED, type);
 
         char complement[100];
-        sprintf(complement, "The %sinteger%s is missing.", KRED, KWHT);
+        sprintf(complement, "\n%5lu | %sERROR:%s The integer is missing.", _line, KRED, KWHT);
 
         inform(_line, _pos, yytext, type, complement);
         _pos += yyleng;
@@ -318,7 +321,7 @@ noncomment {incompleted_comments}
         color(KRED, type);
 
         char complement[100];
-        sprintf(complement, "The %sexponential part%s cannot have fraction.", KRED, KWHT);
+        sprintf(complement, "\n%5lu | %sERROR:%s The exponential part cannot have fraction.", _line, KRED, KWHT);
 
         inform(_line, _pos, yytext, type, complement);
         _pos += yyleng;
@@ -329,7 +332,7 @@ noncomment {incompleted_comments}
         color(KRED, type);
 
         char complement[100];
-        sprintf(complement, "This float contains %smultiple fraction%s.", KRED, KWHT);
+        sprintf(complement, "\n%5lu | %sERROR:%s This float contains multiple fractions.", _line, KRED, KWHT);
 
         inform(_line, _pos, yytext, type, complement);
         _pos += yyleng;
@@ -342,7 +345,15 @@ noncomment {incompleted_comments}
         _pos += yyleng;
     }
     */
+    {incompleted_comments} {
+        char type[50] = "invalid comment";
+        color(KRED, type);
 
+        char complement[100];
+        sprintf(complement, "\n%5lu | %sERROR:%s The comment is incompleted.", _line, KRED, KWHT);
+    }
+
+    /*
     {noncomment} {
         char type[50] = "invalid comment";
         color(KRED, type);
@@ -350,6 +361,7 @@ noncomment {incompleted_comments}
         inform(_line, _pos, yytext, "invalid comment", "");
         _pos += yyleng;
     }
+    */
     
     . {
         char type[50] = "error";
