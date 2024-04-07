@@ -5,6 +5,7 @@ var
   i : integer;
   f : real;
   s : string;
+  a01234567890123: string;
 begin
   (* this is 
     a comment *)
@@ -13,6 +14,7 @@ begin
   *)
   read(i);
   ""
+  a01234567890123 := '0123456789012345678901234567890';
   f := 0.00e-125+1.5;
   f := 0.0.0.0.0;
   f := 1e1;
