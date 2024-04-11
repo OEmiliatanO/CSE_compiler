@@ -819,7 +819,7 @@ char *yytext;
 #define KCYN  "\x1B[36m"
 #define KWHT  "\x1B[37m"
 
-unsigned long _line = 1, _pos = 1;
+unsigned long _line = 1, _pos = 1, _cppos = 1;
 
 void inform(unsigned long l, unsigned long p, const char* token, const char* type, const char* complement);
 void color(const char* c, char* s);
@@ -1237,13 +1237,14 @@ case 8:
 YY_RULE_SETUP
 #line 189 "B103040012.l"
 {
+        _cppos = _pos;
         yymore();
         BEGIN(COMMENT_STATE);
     }
 	YY_BREAK
 case 9:
 YY_RULE_SETUP
-#line 194 "B103040012.l"
+#line 195 "B103040012.l"
 {
         char type[50] = "incompleted comment";
         color(KRED, type);
@@ -1257,7 +1258,7 @@ YY_RULE_SETUP
 	YY_BREAK
 case 10:
 YY_RULE_SETUP
-#line 205 "B103040012.l"
+#line 206 "B103040012.l"
 {
         inform(_line, _pos, yytext, "string", "");
         _pos += yyleng;
@@ -1265,7 +1266,7 @@ YY_RULE_SETUP
 	YY_BREAK
 case 11:
 YY_RULE_SETUP
-#line 210 "B103040012.l"
+#line 211 "B103040012.l"
 {
         char type[50] = "invalid identity";
         color(KRED, type);
@@ -1279,7 +1280,7 @@ YY_RULE_SETUP
 	YY_BREAK
 case 12:
 YY_RULE_SETUP
-#line 221 "B103040012.l"
+#line 222 "B103040012.l"
 {
         char type[50] = "invalid identity";
         color(KRED, type);
@@ -1299,7 +1300,7 @@ YY_RULE_SETUP
     */
 case 13:
 YY_RULE_SETUP
-#line 239 "B103040012.l"
+#line 240 "B103040012.l"
 {
         char type[50] = "invalid string";
         color(KRED, type);
@@ -1342,7 +1343,7 @@ YY_RULE_SETUP
     */
 case 14:
 YY_RULE_SETUP
-#line 281 "B103040012.l"
+#line 282 "B103040012.l"
 {
         char type[50] = "invalid string";
         color(KRED, type);
@@ -1356,7 +1357,7 @@ YY_RULE_SETUP
 	YY_BREAK
 case 15:
 YY_RULE_SETUP
-#line 293 "B103040012.l"
+#line 294 "B103040012.l"
 {
         char type[50] = "invalid string";
         color(KRED, type);
@@ -1376,7 +1377,7 @@ YY_RULE_SETUP
     */
 case 16:
 YY_RULE_SETUP
-#line 311 "B103040012.l"
+#line 312 "B103040012.l"
 {
         char type[50] = "invalid float type";
         color(KRED, type);
@@ -1390,7 +1391,7 @@ YY_RULE_SETUP
 	YY_BREAK
 case 17:
 YY_RULE_SETUP
-#line 322 "B103040012.l"
+#line 323 "B103040012.l"
 {
         char type[50] = "invalid float type";
         color(KRED, type);
@@ -1404,7 +1405,7 @@ YY_RULE_SETUP
 	YY_BREAK
 case 18:
 YY_RULE_SETUP
-#line 333 "B103040012.l"
+#line 334 "B103040012.l"
 {
         char type[50] = "invalid float type";
         color(KRED, type);
@@ -1436,7 +1437,7 @@ YY_RULE_SETUP
     */
 case 19:
 YY_RULE_SETUP
-#line 363 "B103040012.l"
+#line 364 "B103040012.l"
 {
         char type[50] = "incompleted comment";
         color(KRED, type);
@@ -1456,7 +1457,7 @@ YY_RULE_SETUP
     */
 case 20:
 YY_RULE_SETUP
-#line 381 "B103040012.l"
+#line 382 "B103040012.l"
 {
         char type[50] = "error";
         color(KRED, type);
@@ -1469,7 +1470,7 @@ YY_RULE_SETUP
 
 case 21:
 YY_RULE_SETUP
-#line 391 "B103040012.l"
+#line 392 "B103040012.l"
 {
         _pos += yyleng;
         yymore();
@@ -1478,7 +1479,7 @@ YY_RULE_SETUP
 case 22:
 /* rule 22 can match eol */
 YY_RULE_SETUP
-#line 396 "B103040012.l"
+#line 397 "B103040012.l"
 {
         ++_line;
         _pos = 1;
@@ -1487,9 +1488,9 @@ YY_RULE_SETUP
 	YY_BREAK
 case 23:
 YY_RULE_SETUP
-#line 402 "B103040012.l"
+#line 403 "B103040012.l"
 {
-        inform(_line, _pos, yytext, "comment", "");
+        inform(_line, _cppos, yytext, "comment", "");
         BEGIN(INITIAL);
     }
 	YY_BREAK
@@ -1497,7 +1498,7 @@ YY_RULE_SETUP
 
 case 24:
 YY_RULE_SETUP
-#line 409 "B103040012.l"
+#line 410 "B103040012.l"
 {
         inform(_line, _pos, yytext, "symbol", "");
         _pos += yyleng;
@@ -1506,7 +1507,7 @@ YY_RULE_SETUP
 	YY_BREAK
 case 25:
 YY_RULE_SETUP
-#line 415 "B103040012.l"
+#line 416 "B103040012.l"
 {
         yyless(0);
         BEGIN(INITIAL);
@@ -1515,10 +1516,10 @@ YY_RULE_SETUP
 
 case 26:
 YY_RULE_SETUP
-#line 421 "B103040012.l"
+#line 422 "B103040012.l"
 ECHO;
 	YY_BREAK
-#line 1522 "lex.c"
+#line 1523 "lex.c"
 case YY_STATE_EOF(INITIAL):
 case YY_STATE_EOF(COMMENT_STATE):
 case YY_STATE_EOF(NUMERIC_STATE):
@@ -2525,7 +2526,7 @@ void yyfree (void * ptr )
 
 #define YYTABLES_NAME "yytables"
 
-#line 421 "B103040012.l"
+#line 422 "B103040012.l"
 
 
 void color(const char* c, char* s)

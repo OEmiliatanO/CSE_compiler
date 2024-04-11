@@ -13,7 +13,7 @@
 #define KCYN  "\x1B[36m"
 #define KWHT  "\x1B[37m"
 
-unsigned long _line = 1, _pos = 1;
+unsigned long _line = 1, _pos = 1, _cppos = 1;
 
 void inform(unsigned long l, unsigned long p, const char* token, const char* type, const char* complement);
 void color(const char* c, char* s);
@@ -187,6 +187,7 @@ noncomment {incompleted_comments}
     }
 
     {comment_begin} {
+        _cppos = _pos;
         yymore();
         BEGIN(COMMENT_STATE);
     }
@@ -400,7 +401,7 @@ noncomment {incompleted_comments}
     }
 
     {comment_end} {
-        inform(_line, _pos, yytext, "comment", "");
+        inform(_line, _cppos, yytext, "comment", "");
         BEGIN(INITIAL);
     }
 }
