@@ -10,11 +10,11 @@ void yyerror(const char* message) {
     float 	floatVal;
     int 	intVal;
 }
+%type <floatVal> NUMBER
+%type <floatVal> expression term factor group
 %token PLUS MINUS MUL DIV
 %token LP RP
-%token NEWLINE
-%token <floatVal> N_ELEMENT
-%type <floatVal> expression term factor group
+%token NUMBER NEWLINE
 %%
 lines :/* empty */
 	| lines expression NEWLINE {printf("%lf\n", $2);}
@@ -27,7 +27,7 @@ term : factor {  $$ = $1; }
 	| term MUL factor { $$ = $1 * $3; }
 	| term DIV factor { $$ = $1 / $3; }
 	;
-factor : N_ELEMENT { $$ = $1;}
+factor : NUMBER { $$ = $1;}
 	| group {$$ = $1; }
 	;
 group : LP expression RP { $$ = $2; }

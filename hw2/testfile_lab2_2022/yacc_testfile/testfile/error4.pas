@@ -3,6 +3,7 @@ var
   i, j : integer;
   c : string;
 begin
-  i := 'a'+5;
-  j := i+c;
+  i := 5;
+  c := 'aa';
+  i = i+c;
 end.

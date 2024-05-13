@@ -5,7 +5,7 @@
 Digit [0-9]+
 
 %%
-{Digit}		{ sscanf(yytext, "%f", &yylval.floatVal); return N_ELEMENT;}
+{Digit}		{ sscanf(yytext, "%f", &yylval.floatVal); return NUMBER;}
 \+          {return PLUS;}
 \-          {return MINUS;}
 \*          {return MUL;}
