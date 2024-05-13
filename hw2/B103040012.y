@@ -6,6 +6,15 @@
 #include "parsing_type.h"
 #include "expression_stack.h"
 
+#define KNRM  "\x1B[0m"
+#define KRED  "\x1B[31m"
+#define KGRN  "\x1B[32m"
+#define KYEL  "\x1B[33m"
+#define KBLU  "\x1B[34m"
+#define KMAG  "\x1B[35m"
+#define KCYN  "\x1B[36m"
+#define KWHT  "\x1B[37m"
+
 int yylex();
 unsigned long _line = 1;
 int var_declaration = 0;
@@ -111,7 +120,14 @@ var_decl : ID_list ':' { printf(" : "); } type
             { 
                 char id[30]; 
                 strcpy(id, top()); 
-                insert(id, current_type);
+                if (exists(id))
+                {
+                    char buf[100];
+                    sprintf(buf, "%sERROR%s: Duplicate identifier %s", KRED, KWHT, id);
+                    yyerror(buf);
+                }
+                else
+                    insert(id, current_type);
                 pop(); 
             }
             memset(current_type, 0, sizeof(current_type));
@@ -122,7 +138,14 @@ var_decl : ID_list ':' { printf(" : "); } type
             {
                 char id[30]; 
                 strcpy(id, top()); 
-                insert(id, current_type);
+                if (exists(id))
+                {
+                    char buf[100];
+                    sprintf(buf, "%sERROR%s: Duplicate identifier %s", KRED, KWHT, id);
+                    yyerror(buf);
+                }
+                else
+                    insert(id, current_type);
                 pop(); 
             }
             memset(current_type, 0, sizeof(current_type));
@@ -196,7 +219,7 @@ expression : simple_expression
                      || !(strcmp(a.type, "c") == 0 && strcmp(b.type, "c") == 0))
                     {
                         char buf[100];
-                        sprintf(buf, "%s and %s type cannot use '%s' operation.", cpretty(a.type), cpretty(b.type), $2);
+                        sprintf(buf, "%sERROR%s: %s and %s type cannot use '%s' operation.", KRED, KWHT, cpretty(a.type), cpretty(b.type), $2);
                         yyerror(buf);
                     }
                 exp_push(KIND_NUM, "i");
@@ -211,7 +234,7 @@ simple_expression : term
                      || (strcmp(b.type, "i") != 0 && strcmp(b.type, "f") != 0))
                     {
                         char buf[100];
-                        sprintf(buf, "%s and %s type cannot use '%s' operation.", cpretty(a.type), cpretty(b.type), $2);
+                        sprintf(buf, "%sERROR%s: %s and %s type cannot use '%s' operation.", KRED, KWHT, cpretty(a.type), cpretty(b.type), $2);
                         yyerror(buf);
                         exp_push(KIND_NUM, "i");
                     }
@@ -230,7 +253,7 @@ term : factor
          || (strcmp(b.type, "i") != 0 && strcmp(b.type, "f") != 0))
         {
             char buf[100];
-            sprintf(buf, "%s and %s type cannot use '%s' operation.", cpretty(a.type), cpretty(b.type), $2);
+            sprintf(buf, "%sERROR%s: %s and %s type cannot use '%s' operation.", KRED, KWHT, cpretty(a.type), cpretty(b.type), $2);
             yyerror(buf);
         }
         else if (strcmp(a.type, "f") == 0 || strcmp(b.type, "f") == 0)
@@ -247,7 +270,7 @@ factor : variable
             if (strcmp(a.type, "i") != 0)
             {
                 char buf[100];
-                sprintf(buf, "%s cannot be NOTed.", cpretty(a.type));
+                sprintf(buf, "%sERROR%s: %s cannot be NOTed.", KRED, KWHT, cpretty(a.type));
                 yyerror(buf);
             }
             exp_push(KIND_NUM, a.type);
@@ -265,7 +288,7 @@ entire_variable : INT { printf("%d", $1); exp_push(KIND_NUM, "i"); }
                     if (exists($1) == 0)
                     {
                         char buf[100];
-                        sprintf(buf, "%s was not declared in this scope.", $1);
+                        sprintf(buf, "%sERROR%s: %s was not declared in this scope.", KRED, KWHT, $1);
                         yyerror(buf);
                         exp_push(KIND_NUM, "i");
                     }
@@ -290,7 +313,11 @@ indexed_variable : variable '[' { printf("["); } expression ']'
                     node_t array = exp_top(); exp_pop();
 
                     if (array.type[0] != 'a')
-                        yyerror("Only array type can be indexed.");
+                    {
+                        char buf[100];
+                        sprintf(buf, "%sERROR%s: Only array type can be indexed.", KRED, KWHT);
+                        yyerror(buf);
+                    }
                     else
                     {
                         sscanf(array.type+1, "%d", &dimension);
@@ -302,7 +329,11 @@ indexed_variable : variable '[' { printf("["); } expression ']'
                     }
 
                     if (strcmp(index.type, "i") != 0)
-                        yyerror("The index of array is not integer.");
+                    {
+                        char buf[100];
+                        sprintf(buf, "%sERROR%s: The index of array is not integer.", KRED, KWHT);
+                        yyerror(buf);
+                    }
 
                     dimension = 0;
                     exp_push(KIND_NUM, array.type);
@@ -334,13 +365,13 @@ function_designator : BUILTIN_FUNCTION
                         if (exists($1) == 0)
                         {
                             char buf[100];
-                            sprintf(buf, "function %s was not declared in this scope.", $1);
+                            sprintf(buf, "%sERROR%s: Function %s was not declared in this scope.", KRED, KWHT, $1);
                             yyerror(buf);
                         }
                         else if (lookup_type($1)[0] != 'n')
                         {
                             char buf[100];
-                            sprintf(buf, "%s type is not callable.", cpretty(lookup_type($1)));
+                            sprintf(buf, "%sERROR%s: %s type is not callable.", KRED, KWHT, cpretty(lookup_type($1)));
                             yyerror(buf);
                         }
                         else
@@ -352,13 +383,13 @@ function_designator : BUILTIN_FUNCTION
                                 exp_push(KIND_NUM, _type+1);
                         }
                     };
-actual_parameter_list : | actual_parameter_list ',' { printf(", "); } actual_parameter
-actual_parameter : expression
+actual_parameter_list : | actual_parameter_list ',' { printf(", "); } actual_parameter;
+actual_parameter : expression;
 
 EOSE : ';' { printf(";"); };
 
-if_statement : IF { printf("if "); } expression THEN { printf(" then "); } statement else;
-else: | ELSE { printf(" else \n"); } statement;
+if_statement : IF { printf("if "); } expression THEN { printf(" then "); } statement else | error statement else; 
+else: | ELSE { printf("else "); } statement | error statement;
 
 case_statement : CASE expression OF case_list_element case_list_rept END;
 case_list_rept : | EOSE case_list_rept;
@@ -376,11 +407,15 @@ assignment_statement : variable ASSIGN { printf(" := "); } expression
                         if (var.type[0] != expr.type[0])
                         {
                             if (var.type[0] == 'i' && expr.type[0] == 'f')
-                                yyerror("WARNING: narrowing conversion form float to int.");
+                            {
+                                char buf[100];
+                                sprintf(buf, "%sWARNING%s: Narrowing conversion form float to int.", KRED, KWHT);
+                                yyerror(buf);
+                            }
                             else
                             {
                                 char buf[100];
-                                sprintf(buf, "cannot convert %s to %s.", cpretty(expr.type), cpretty(var.type));
+                                sprintf(buf, "%sERROR%s: Cannot convert %s to %s.", KRED, KWHT, cpretty(expr.type), cpretty(var.type));
                                 yyerror(buf);
                             }
                         }
@@ -392,11 +427,15 @@ assignment_statement : variable ASSIGN { printf(" := "); } expression
                         if (var.type[0] != expr.type[0])
                         {
                             if (var.type[0] == 'i' && expr.type[0] == 'f')
-                                yyerror("WARNING: narrowing conversion form float to int.");
+                            {
+                                char buf[100];
+                                sprintf(buf, "%sWARNING%s: Narrowing conversion form float to int.", KRED, KWHT);
+                                yyerror(buf);
+                            }
                             else
                             {
                                 char buf[100];
-                                sprintf(buf, "cannot convert %s to %s.", cpretty(expr.type), cpretty(var.type));
+                                sprintf(buf, "%sERROR%s: Cannot convert %s to %s.", KRED, KWHT, cpretty(expr.type), cpretty(var.type));
                                 yyerror(buf);
                             }
                         }
@@ -429,7 +468,25 @@ variable_list: variable variable_list_rept;
 
 variable_list_rept : | variable_list_rept ',' { printf(", "); } variable;
 
-procedure_statement : BUILTIN_FUNCTION { printf("%s", $1); } | BUILTIN_FUNCTION { printf("%s", $1); } '(' { printf("("); } actual_parameter actual_parameter_list ')' { printf(")"); };;
+procedure_statement : BUILTIN_FUNCTION { printf("%s", $1); } 
+                    | BUILTIN_FUNCTION { printf("%s", $1); } '(' { printf("("); } actual_parameter actual_parameter_list ')' { printf(")"); }
+                    | ID { printf("%s", $1); } '(' { printf("("); } actual_parameter actual_parameter_list ')' 
+                    {
+                        printf(")");
+
+                        if (exists($1) == 0)
+                        {
+                            char buf[100];
+                            sprintf(buf, "%sERROR%s: Function %s was not declared in this scope.", KRED, KWHT, $1);
+                            yyerror(buf);
+                        }
+                        else if (lookup_type($1)[0] != 'n')
+                        {
+                            char buf[100];
+                            sprintf(buf, "%sERROR%s: %s type is not callable.", KRED, KWHT, cpretty(lookup_type($1)));
+                            yyerror(buf);
+                        }
+                    };
 
 %%
 int main() {

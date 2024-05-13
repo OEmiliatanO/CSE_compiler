@@ -67,7 +67,7 @@ shiftl \<\<
 logicalnot not
 
 symbols {eqq}|{curly_bracket}|{bitand}|{bitnot}|{shiftr}|{shiftl}
-op_symbols {eq}|{eqq}|{bitand}|{bitor}|{bitnot}|{shiftr}|{shiftl}
+op_symbols {eq}|{bitand}|{bitor}|{bitnot}|{shiftr}|{shiftl}
 
 relational_op {eq}|{ne}|{le}|{leq}|{geq}|{ge}|in
 add_op {plus}|{sub}|or
