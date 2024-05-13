@@ -1,0 +1,7 @@
+!<arch>
+//                                              18        `
+parsing_type.cpp/
+/0              0           0     0     644     110       `
+#include "parsing_type.h"
+
+const char* rev_type[6] = {"int", "char", "float", "string", "identity", "array"};

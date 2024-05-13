@@ -19,9 +19,9 @@ unsigned long _pos = 1, _cppos = 1;
 void inform(unsigned long l, unsigned long p, const char* token, const char* type, const char* complement);
 void color(const char* c, char* s);
 %}
-reserved_word absolute|const|function|nil
-type "integer"|"double"|"string"|"float"|"real"|"single"|"byte"|"longint"|"word"|"longword"|"shortint"|"cardinal"|"object"|"array"
-builtin_function write|writeln|read
+reserved_word absolute|const|nil
+type "integer"|"double"|"string"|"float"|"real"|"single"|"byte"|"longint"|"word"|"longword"|"shortint"|"cardinal"|"object"|"char"
+builtin_function write|writeln|read|concat
 
 id [A-Za-z_][_[:alnum:]]{0,14}
 unsigned [0-9]+
@@ -127,6 +127,14 @@ noncomment {incompleted_comments}
         return PROGRAM;
     }
 
+    "function" {
+        return FUNCTION;
+    }
+
+    "procedure" {
+        return PROCEDURE;
+    }
+
     "for" {
         return FOR;
     }
@@ -209,6 +217,8 @@ noncomment {incompleted_comments}
 
     {builtin_function} {
         yylval.stringVal = strdup(yytext);
+        for (char* p = yylval.stringVal; *p; ++p)
+            *p = tolower(*p);
         return BUILTIN_FUNCTION;
     }
 
@@ -218,6 +228,8 @@ noncomment {incompleted_comments}
 
     {type} {
         yylval.stringVal = strdup(yytext);
+        for (char* p = yylval.stringVal; *p; ++p)
+            *p = tolower(*p);
         return TYPE;
     }
 
@@ -276,30 +288,40 @@ noncomment {incompleted_comments}
     {relational_op} {
         BEGIN(INITIAL);
         yylval.stringVal = strdup(yytext);
+        for (char* p = yylval.stringVal; *p; ++p)
+            *p = tolower(*p);
         return RELATIONAL_OP;
     }
 
     {add_op} {
         BEGIN(INITIAL);
         yylval.stringVal = strdup(yytext);
+        for (char* p = yylval.stringVal; *p; ++p)
+            *p = tolower(*p);
         return ADD_OP;
     }
 
     {mul_op} {
         BEGIN(INITIAL);
         yylval.stringVal = strdup(yytext);
+        for (char* p = yylval.stringVal; *p; ++p)
+            *p = tolower(*p);
         return MUL_OP;
     }
 
     {id} {
         _pos += yyleng;
         yylval.stringVal = strdup(yytext);
+        for (char* p = yylval.stringVal; *p; ++p)
+            *p = tolower(*p);
         //printf("detect \"%s\"", yytext);
         return ID;
     }
 
     {string} {
         yylval.stringVal = strdup(yytext);
+        for (char* p = yylval.stringVal; *p; ++p)
+            *p = tolower(*p);
         BEGIN(NUMERIC_STATE);
         return STRING;
     }
@@ -439,8 +461,10 @@ noncomment {incompleted_comments}
         char type[50] = "Error";
         color(KRED, type);
 
-        inform(_line, _pos, yytext, type, "");
+        //inform(_line, _pos, yytext, type, "");
         _pos += yyleng;
+
+        return yytext[0];
     }
 }
 
@@ -463,18 +487,24 @@ noncomment {incompleted_comments}
     {relational_op} {
         BEGIN(INITIAL);
         yylval.stringVal = strdup(yytext);
+        for (char* p = yylval.stringVal; *p; ++p)
+            *p = tolower(*p);
         return RELATIONAL_OP;
     }
 
     {add_op} {
         BEGIN(INITIAL);
         yylval.stringVal = strdup(yytext);
+        for (char* p = yylval.stringVal; *p; ++p)
+            *p = tolower(*p);
         return ADD_OP;
     }
 
     {mul_op} {
         BEGIN(INITIAL);
         yylval.stringVal = strdup(yytext);
+        for (char* p = yylval.stringVal; *p; ++p)
+            *p = tolower(*p);
         return MUL_OP;
     }
     
@@ -495,7 +525,7 @@ void color(const char* c, char* s)
 
 void inform(unsigned long l, unsigned long p, const char* token, const char* type, const char* complement)
 {
-    printf("Line: %lu, 1st char: %lu, \"%s\" is a \"%s\". %s\n", l, p, token, type, complement);
+    printf("Lex Line: %lu, 1st char: %lu, \"%s\" is a \"%s\". %s\n", l, p, token, type, complement);
 }
 
 int yywrap(){

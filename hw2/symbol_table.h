@@ -9,9 +9,10 @@ extern "C"
     void pop(void);
     const char * top(void);
     int empty(void);
-    void insert(const char * _token, int type);
+    void insert(const char * _token, const char * type);
     int exists(const char * id);
-    int lookup_type(const char * id);
+    const char * lookup_type(const char * id);
+    const char * cpretty(const char * rtype);
     void show_symbol_table(void);
 #ifdef __cplusplus
 }

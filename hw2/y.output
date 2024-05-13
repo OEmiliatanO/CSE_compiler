@@ -1,0 +1,3954 @@
+Terminals unused in grammar
+
+    BREAK
+    CONTINUE
+    NEWLINE
+    WRITE
+    WRITELN
+    READ
+    COMMENT
+    END_OF_FILE
+
+
+State 239 conflicts: 1 shift/reduce
+
+
+Grammar
+
+    0 $accept: program $end
+
+    1 $@1: %empty
+
+    2 program: PROGRAM ID ';' $@1 block
+
+    3 $@2: %empty
+
+    4 program: error ID ';' $@2 block
+
+    5 block: procedure_function_decl_part var_decl_part statement_part
+    6      | error var_decl_part statement_part
+
+    7 block_: procedure_function_decl_part var_decl_part statement_part_
+    8       | error var_decl_part statement_part_
+
+    9 procedure_function_decl_part: %empty
+   10                             | procedure_function_decl_part procedure_or_function ';'
+
+   11 procedure_or_function: procedure_decl
+   12                      | function_decl
+
+   13 procedure_decl: procedure_header block_
+
+   14 procedure_header: procedure_header_common ';'
+
+   15 $@3: %empty
+
+   16 $@4: %empty
+
+   17 procedure_header: procedure_header_common '(' $@3 formal_parameter_section_list ')' $@4 ';'
+
+   18 $@5: %empty
+
+   19 procedure_header_common: PROCEDURE $@5 ID
+
+   20 formal_parameter_section_list: formal_parameter_section formal_parameter_section_rept
+
+   21 formal_parameter_section_rept: %empty
+
+   22 $@6: %empty
+
+   23 formal_parameter_section_rept: formal_parameter_section_rept ';' $@6 formal_parameter_section
+
+   24 formal_parameter_section: parameter_group
+
+   25 $@7: %empty
+
+   26 formal_parameter_section: VAR $@7 parameter_group
+
+   27 $@8: %empty
+
+   28 parameter_group: ID_list ':' $@8 parameter_type
+
+   29 parameter_type: type_identifier
+   30               | structured_type
+
+   31 return_type: type_identifier
+   32            | structured_type
+
+   33 function_decl: function_header block_
+
+   34 $@9: %empty
+
+   35 $@10: %empty
+
+   36 $@11: %empty
+
+   37 function_header: FUNCTION ID $@9 ':' $@10 return_type $@11 ';'
+
+   38 $@12: %empty
+
+   39 $@13: %empty
+
+   40 $@14: %empty
+
+   41 $@15: %empty
+
+   42 $@16: %empty
+
+   43 function_header: FUNCTION ID $@12 '(' $@13 formal_parameter_section_list ')' $@14 ':' $@15 return_type $@16 ';'
+
+   44 var_decl_part: %empty
+
+   45 $@17: %empty
+
+   46 var_decl_part: VAR $@17 var_decl var_decl_rept EOSE
+
+   47 $@18: %empty
+
+   48 var_decl: ID_list ':' $@18 type
+   49         | ID_list error type
+
+   50 var_decl_rept: %empty
+   51              | var_decl_rept EOSE var_decl
+
+   52 type: simple_type
+   53     | structured_type
+
+   54 simple_type: scalar_type
+   55            | subrange_type
+   56            | type_identifier
+
+   57 $@19: %empty
+
+   58 scalar_type: '(' $@19 ID_list ')'
+
+   59 $@20: %empty
+
+   60 subrange_type: const '.' '.' $@20 const
+
+   61 const: INT
+   62      | FLOAT
+   63      | ID
+
+   64 type_identifier: TYPE
+
+   65 structured_type: array_type
+
+   66 $@21: %empty
+
+   67 $@22: %empty
+
+   68 $@23: %empty
+
+   69 $@24: %empty
+
+   70 array_type: ARRAY $@21 '[' $@22 index_type index_type_rept ']' $@23 OF $@24 type
+
+   71 index_type: simple_type
+
+   72 index_type_rept: %empty
+
+   73 $@25: %empty
+
+   74 index_type_rept: index_type_rept ',' $@25 simple_type
+
+   75 $@26: %empty
+
+   76 ID_list: ID $@26 ID_list_rept
+
+   77 ID_list_rept: %empty
+   78             | ID_list_rept ',' ID
+
+   79 statement_part: first_compound_statement
+
+   80 statement_part_: compound_statement
+
+   81 expression: simple_expression
+
+   82 $@27: %empty
+
+   83 expression: simple_expression RELATIONAL_OP $@27 simple_expression
+
+   84 simple_expression: term
+
+   85 $@28: %empty
+
+   86 simple_expression: simple_expression ADD_OP $@28 term
+
+   87 term: factor
+
+   88 $@29: %empty
+
+   89 term: term MUL_OP $@29 factor
+
+   90 factor: variable
+
+   91 $@30: %empty
+
+   92 factor: '(' $@30 expression ')'
+
+   93 $@31: %empty
+
+   94 factor: LOGICALNOT $@31 factor
+   95       | function_designator
+
+   96 variable: entire_variable
+   97         | indexed_variable
+
+   98 entire_variable: INT
+   99                | FLOAT
+  100                | STRING
+  101                | ID
+
+  102 $@32: %empty
+
+  103 indexed_variable: variable '[' $@32 expression ']'
+
+  104 function_designator: BUILTIN_FUNCTION
+
+  105 $@33: %empty
+
+  106 $@34: %empty
+
+  107 function_designator: BUILTIN_FUNCTION $@33 '(' $@34 actual_parameter actual_parameter_list ')'
+
+  108 $@35: %empty
+
+  109 $@36: %empty
+
+  110 function_designator: ID $@35 '(' $@36 actual_parameter actual_parameter_list ')'
+
+  111 actual_parameter_list: %empty
+
+  112 $@37: %empty
+
+  113 actual_parameter_list: actual_parameter_list ',' $@37 actual_parameter
+
+  114 actual_parameter: expression
+
+  115 EOSE: ';'
+
+  116 $@38: %empty
+
+  117 $@39: %empty
+
+  118 if_statement: IF $@38 expression THEN $@39 statement else
+
+  119 else: %empty
+
+  120 $@40: %empty
+
+  121 else: ELSE $@40 statement
+
+  122 case_statement: CASE expression OF case_list_element case_list_rept END
+
+  123 case_list_rept: %empty
+  124               | EOSE case_list_rept
+
+  125 case_list_element: %empty
+
+  126 $@41: %empty
+
+  127 case_list_element: case_label_list ':' $@41 statement
+
+  128 case_label_list: case_label case_label_rept
+
+  129 case_label_rept: %empty
+
+  130 $@42: %empty
+
+  131 case_label_rept: case_label_rept ',' $@42 case_label
+
+  132 case_label: INT
+  133           | STRING
+  134           | ID
+
+  135 statement: %empty
+  136          | structured_statement
+  137          | assignment_statement
+  138          | procedure_statement
+
+  139 $@43: %empty
+
+  140 assignment_statement: variable ASSIGN $@43 expression
+  141                     | variable error expression
+
+  142 structured_statement: compound_statement
+  143                     | conditional_statement
+  144                     | reptive_statement
+  145                     | with_statement
+
+  146 $@44: %empty
+
+  147 $@45: %empty
+
+  148 $@46: %empty
+
+  149 first_compound_statement: _BEGIN $@44 statement rept_statement $@45 END $@46 '.'
+
+  150 $@47: %empty
+
+  151 compound_statement: _BEGIN $@47 statement rept_statement END
+
+  152 conditional_statement: if_statement
+  153                      | case_statement
+
+  154 rept_statement: %empty
+  155               | rept_statement EOSE statement
+
+  156 reptive_statement: while_stat
+  157                  | rept_stat
+  158                  | for_stat
+
+  159 $@48: %empty
+
+  160 $@49: %empty
+
+  161 while_stat: WHILE $@48 expression DO $@49 statement
+
+  162 $@50: %empty
+
+  163 $@51: %empty
+
+  164 rept_stat: REPEAT $@50 statement rept_rept_stat UNTIL $@51 expression
+
+  165 rept_rept_stat: %empty
+  166               | rept_rept_stat EOSE statement
+
+  167 $@52: %empty
+
+  168 $@53: %empty
+
+  169 $@54: %empty
+
+  170 $@55: %empty
+
+  171 for_stat: FOR $@52 ID $@53 ASSIGN $@54 for_list DO $@55 statement
+
+  172 $@56: %empty
+
+  173 for_list: expression TO $@56 expression
+
+  174 $@57: %empty
+
+  175 for_list: expression DOWNTO $@57 expression
+
+  176 $@58: %empty
+
+  177 $@59: %empty
+
+  178 with_statement: WITH $@58 variable_list DO $@59 statement
+
+  179 variable_list: variable variable_list_rept
+
+  180 variable_list_rept: %empty
+
+  181 $@60: %empty
+
+  182 variable_list_rept: variable_list_rept ',' $@60 variable
+
+  183 procedure_statement: BUILTIN_FUNCTION
+
+  184 $@61: %empty
+
+  185 $@62: %empty
+
+  186 procedure_statement: BUILTIN_FUNCTION $@61 '(' $@62 actual_parameter actual_parameter_list ')'
+
+
+Terminals, with rules where they appear
+
+    $end (0) 0
+    '(' (40) 17 43 58 92 107 110 186
+    ')' (41) 17 43 58 92 107 110 186
+    ',' (44) 74 78 113 131 182
+    '.' (46) 60 149
+    ':' (58) 28 37 43 48 127
+    ';' (59) 2 4 10 14 17 23 37 43 115
+    '[' (91) 70 103
+    ']' (93) 70 103
+    error (256) 4 6 8 49 141
+    PROGRAM (258) 2
+    FUNCTION (259) 37 43
+    PROCEDURE (260) 19
+    ARRAY (261) 70
+    IF (262) 118
+    THEN (263) 118
+    ELSE (264) 121
+    CASE (265) 122
+    OF (266) 70 122
+    END (267) 122 149 151
+    ASSIGN (268) 140 171
+    _BEGIN (269) 149 151
+    WHILE (270) 161
+    DO (271) 161 171 178
+    REPEAT (272) 164
+    UNTIL (273) 164
+    FOR (274) 171
+    TO (275) 173
+    DOWNTO (276) 175
+    BREAK (277)
+    CONTINUE (278)
+    VAR (279) 26 46
+    LOGICALNOT (280) 94
+    NEWLINE (281)
+    WITH (282) 178
+    WRITE (283)
+    WRITELN (284)
+    READ (285)
+    FLOAT <floatVal> (286) 62 99
+    INT <intVal> (287) 61 98 132
+    STRING <stringVal> (288) 100 133
+    ID <stringVal> (289) 2 4 19 37 43 63 76 78 101 110 134 171
+    RELATIONAL_OP <stringVal> (290) 83
+    ADD_OP <stringVal> (291) 86
+    MUL_OP <stringVal> (292) 89
+    TYPE <stringVal> (293) 64
+    BUILTIN_FUNCTION <stringVal> (294) 104 107 183 186
+    COMMENT (295)
+    END_OF_FILE (296)
+
+
+Nonterminals, with rules where they appear
+
+    $accept (50)
+        on left: 0
+    program (51)
+        on left: 2 4
+        on right: 0
+    $@1 (52)
+        on left: 1
+        on right: 2
+    $@2 (53)
+        on left: 3
+        on right: 4
+    block (54)
+        on left: 5 6
+        on right: 2 4
+    block_ (55)
+        on left: 7 8
+        on right: 13 33
+    procedure_function_decl_part (56)
+        on left: 9 10
+        on right: 5 7 10
+    procedure_or_function (57)
+        on left: 11 12
+        on right: 10
+    procedure_decl (58)
+        on left: 13
+        on right: 11
+    procedure_header (59)
+        on left: 14 17
+        on right: 13
+    $@3 (60)
+        on left: 15
+        on right: 17
+    $@4 (61)
+        on left: 16
+        on right: 17
+    procedure_header_common (62)
+        on left: 19
+        on right: 14 17
+    $@5 (63)
+        on left: 18
+        on right: 19
+    formal_parameter_section_list (64)
+        on left: 20
+        on right: 17 43
+    formal_parameter_section_rept (65)
+        on left: 21 23
+        on right: 20 23
+    $@6 (66)
+        on left: 22
+        on right: 23
+    formal_parameter_section (67)
+        on left: 24 26
+        on right: 20 23
+    $@7 (68)
+        on left: 25
+        on right: 26
+    parameter_group (69)
+        on left: 28
+        on right: 24 26
+    $@8 (70)
+        on left: 27
+        on right: 28
+    parameter_type (71)
+        on left: 29 30
+        on right: 28
+    return_type (72)
+        on left: 31 32
+        on right: 37 43
+    function_decl (73)
+        on left: 33
+        on right: 12
+    function_header (74)
+        on left: 37 43
+        on right: 33
+    $@9 (75)
+        on left: 34
+        on right: 37
+    $@10 (76)
+        on left: 35
+        on right: 37
+    $@11 (77)
+        on left: 36
+        on right: 37
+    $@12 (78)
+        on left: 38
+        on right: 43
+    $@13 (79)
+        on left: 39
+        on right: 43
+    $@14 (80)
+        on left: 40
+        on right: 43
+    $@15 (81)
+        on left: 41
+        on right: 43
+    $@16 (82)
+        on left: 42
+        on right: 43
+    var_decl_part (83)
+        on left: 44 46
+        on right: 5 6 7 8
+    $@17 (84)
+        on left: 45
+        on right: 46
+    var_decl (85)
+        on left: 48 49
+        on right: 46 51
+    $@18 (86)
+        on left: 47
+        on right: 48
+    var_decl_rept (87)
+        on left: 50 51
+        on right: 46 51
+    type (88)
+        on left: 52 53
+        on right: 48 49 70
+    simple_type (89)
+        on left: 54 55 56
+        on right: 52 71 74
+    scalar_type (90)
+        on left: 58
+        on right: 54
+    $@19 (91)
+        on left: 57
+        on right: 58
+    subrange_type (92)
+        on left: 60
+        on right: 55
+    $@20 (93)
+        on left: 59
+        on right: 60
+    const (94)
+        on left: 61 62 63
+        on right: 60
+    type_identifier (95)
+        on left: 64
+        on right: 29 31 56
+    structured_type (96)
+        on left: 65
+        on right: 30 32 53
+    array_type (97)
+        on left: 70
+        on right: 65
+    $@21 (98)
+        on left: 66
+        on right: 70
+    $@22 (99)
+        on left: 67
+        on right: 70
+    $@23 (100)
+        on left: 68
+        on right: 70
+    $@24 (101)
+        on left: 69
+        on right: 70
+    index_type (102)
+        on left: 71
+        on right: 70
+    index_type_rept (103)
+        on left: 72 74
+        on right: 70 74
+    $@25 (104)
+        on left: 73
+        on right: 74
+    ID_list (105)
+        on left: 76
+        on right: 28 48 49 58
+    $@26 (106)
+        on left: 75
+        on right: 76
+    ID_list_rept (107)
+        on left: 77 78
+        on right: 76 78
+    statement_part (108)
+        on left: 79
+        on right: 5 6
+    statement_part_ (109)
+        on left: 80
+        on right: 7 8
+    expression (110)
+        on left: 81 83
+        on right: 92 103 114 118 122 140 141 161 164 173 175
+    $@27 (111)
+        on left: 82
+        on right: 83
+    simple_expression (112)
+        on left: 84 86
+        on right: 81 83 86
+    $@28 (113)
+        on left: 85
+        on right: 86
+    term (114)
+        on left: 87 89
+        on right: 84 86 89
+    $@29 (115)
+        on left: 88
+        on right: 89
+    factor (116)
+        on left: 90 92 94 95
+        on right: 87 89 94
+    $@30 (117)
+        on left: 91
+        on right: 92
+    $@31 (118)
+        on left: 93
+        on right: 94
+    variable (119)
+        on left: 96 97
+        on right: 90 103 140 141 179 182
+    entire_variable (120)
+        on left: 98 99 100 101
+        on right: 96
+    indexed_variable (121)
+        on left: 103
+        on right: 97
+    $@32 (122)
+        on left: 102
+        on right: 103
+    function_designator (123)
+        on left: 104 107 110
+        on right: 95
+    $@33 (124)
+        on left: 105
+        on right: 107
+    $@34 (125)
+        on left: 106
+        on right: 107
+    $@35 (126)
+        on left: 108
+        on right: 110
+    $@36 (127)
+        on left: 109
+        on right: 110
+    actual_parameter_list (128)
+        on left: 111 113
+        on right: 107 110 113 186
+    $@37 (129)
+        on left: 112
+        on right: 113
+    actual_parameter (130)
+        on left: 114
+        on right: 107 110 113 186
+    EOSE (131)
+        on left: 115
+        on right: 46 51 124 155 166
+    if_statement (132)
+        on left: 118
+        on right: 152
+    $@38 (133)
+        on left: 116
+        on right: 118
+    $@39 (134)
+        on left: 117
+        on right: 118
+    else (135)
+        on left: 119 121
+        on right: 118
+    $@40 (136)
+        on left: 120
+        on right: 121
+    case_statement (137)
+        on left: 122
+        on right: 153
+    case_list_rept (138)
+        on left: 123 124
+        on right: 122 124
+    case_list_element (139)
+        on left: 125 127
+        on right: 122
+    $@41 (140)
+        on left: 126
+        on right: 127
+    case_label_list (141)
+        on left: 128
+        on right: 127
+    case_label_rept (142)
+        on left: 129 131
+        on right: 128 131
+    $@42 (143)
+        on left: 130
+        on right: 131
+    case_label (144)
+        on left: 132 133 134
+        on right: 128 131
+    statement (145)
+        on left: 135 136 137 138
+        on right: 118 121 127 149 151 155 161 164 166 171 178
+    assignment_statement (146)
+        on left: 140 141
+        on right: 137
+    $@43 (147)
+        on left: 139
+        on right: 140
+    structured_statement (148)
+        on left: 142 143 144 145
+        on right: 136
+    first_compound_statement (149)
+        on left: 149
+        on right: 79
+    $@44 (150)
+        on left: 146
+        on right: 149
+    $@45 (151)
+        on left: 147
+        on right: 149
+    $@46 (152)
+        on left: 148
+        on right: 149
+    compound_statement (153)
+        on left: 151
+        on right: 80 142
+    $@47 (154)
+        on left: 150
+        on right: 151
+    conditional_statement (155)
+        on left: 152 153
+        on right: 143
+    rept_statement (156)
+        on left: 154 155
+        on right: 149 151 155
+    reptive_statement (157)
+        on left: 156 157 158
+        on right: 144
+    while_stat (158)
+        on left: 161
+        on right: 156
+    $@48 (159)
+        on left: 159
+        on right: 161
+    $@49 (160)
+        on left: 160
+        on right: 161
+    rept_stat (161)
+        on left: 164
+        on right: 157
+    $@50 (162)
+        on left: 162
+        on right: 164
+    $@51 (163)
+        on left: 163
+        on right: 164
+    rept_rept_stat (164)
+        on left: 165 166
+        on right: 164 166
+    for_stat (165)
+        on left: 171
+        on right: 158
+    $@52 (166)
+        on left: 167
+        on right: 171
+    $@53 (167)
+        on left: 168
+        on right: 171
+    $@54 (168)
+        on left: 169
+        on right: 171
+    $@55 (169)
+        on left: 170
+        on right: 171
+    for_list (170)
+        on left: 173 175
+        on right: 171
+    $@56 (171)
+        on left: 172
+        on right: 173
+    $@57 (172)
+        on left: 174
+        on right: 175
+    with_statement (173)
+        on left: 178
+        on right: 145
+    $@58 (174)
+        on left: 176
+        on right: 178
+    $@59 (175)
+        on left: 177
+        on right: 178
+    variable_list (176)
+        on left: 179
+        on right: 178
+    variable_list_rept (177)
+        on left: 180 182
+        on right: 179 182
+    $@60 (178)
+        on left: 181
+        on right: 182
+    procedure_statement (179)
+        on left: 183 186
+        on right: 138
+    $@61 (180)
+        on left: 184
+        on right: 186
+    $@62 (181)
+        on left: 185
+        on right: 186
+
+
+State 0
+
+    0 $accept: . program $end
+
+    error    shift, and go to state 1
+    PROGRAM  shift, and go to state 2
+
+    program  go to state 3
+
+
+State 1
+
+    4 program: error . ID ';' $@2 block
+
+    ID  shift, and go to state 4
+
+
+State 2
+
+    2 program: PROGRAM . ID ';' $@1 block
+
+    ID  shift, and go to state 5
+
+
+State 3
+
+    0 $accept: program . $end
+
+    $end  shift, and go to state 6
+
+
+State 4
+
+    4 program: error ID . ';' $@2 block
+
+    ';'  shift, and go to state 7
+
+
+State 5
+
+    2 program: PROGRAM ID . ';' $@1 block
+
+    ';'  shift, and go to state 8
+
+
+State 6
+
+    0 $accept: program $end .
+
+    $default  accept
+
+
+State 7
+
+    4 program: error ID ';' . $@2 block
+
+    $default  reduce using rule 3 ($@2)
+
+    $@2  go to state 9
+
+
+State 8
+
+    2 program: PROGRAM ID ';' . $@1 block
+
+    $default  reduce using rule 1 ($@1)
+
+    $@1  go to state 10
+
+
+State 9
+
+    4 program: error ID ';' $@2 . block
+
+    error  shift, and go to state 11
+
+    FUNCTION   reduce using rule 9 (procedure_function_decl_part)
+    PROCEDURE  reduce using rule 9 (procedure_function_decl_part)
+    _BEGIN     reduce using rule 9 (procedure_function_decl_part)
+    VAR        reduce using rule 9 (procedure_function_decl_part)
+
+    block                         go to state 12
+    procedure_function_decl_part  go to state 13
+
+
+State 10
+
+    2 program: PROGRAM ID ';' $@1 . block
+
+    error  shift, and go to state 11
+
+    FUNCTION   reduce using rule 9 (procedure_function_decl_part)
+    PROCEDURE  reduce using rule 9 (procedure_function_decl_part)
+    _BEGIN     reduce using rule 9 (procedure_function_decl_part)
+    VAR        reduce using rule 9 (procedure_function_decl_part)
+
+    block                         go to state 14
+    procedure_function_decl_part  go to state 13
+
+
+State 11
+
+    6 block: error . var_decl_part statement_part
+
+    VAR  shift, and go to state 15
+
+    $default  reduce using rule 44 (var_decl_part)
+
+    var_decl_part  go to state 16
+
+
+State 12
+
+    4 program: error ID ';' $@2 block .
+
+    $default  reduce using rule 4 (program)
+
+
+State 13
+
+    5 block: procedure_function_decl_part . var_decl_part statement_part
+   10 procedure_function_decl_part: procedure_function_decl_part . procedure_or_function ';'
+
+    FUNCTION   shift, and go to state 17
+    PROCEDURE  shift, and go to state 18
+    VAR        shift, and go to state 15
+
+    $default  reduce using rule 44 (var_decl_part)
+
+    procedure_or_function    go to state 19
+    procedure_decl           go to state 20
+    procedure_header         go to state 21
+    procedure_header_common  go to state 22
+    function_decl            go to state 23
+    function_header          go to state 24
+    var_decl_part            go to state 25
+
+
+State 14
+
+    2 program: PROGRAM ID ';' $@1 block .
+
+    $default  reduce using rule 2 (program)
+
+
+State 15
+
+   46 var_decl_part: VAR . $@17 var_decl var_decl_rept EOSE
+
+    $default  reduce using rule 45 ($@17)
+
+    $@17  go to state 26
+
+
+State 16
+
+    6 block: error var_decl_part . statement_part
+
+    _BEGIN  shift, and go to state 27
+
+    statement_part            go to state 28
+    first_compound_statement  go to state 29
+
+
+State 17
+
+   37 function_header: FUNCTION . ID $@9 ':' $@10 return_type $@11 ';'
+   43                | FUNCTION . ID $@12 '(' $@13 formal_parameter_section_list ')' $@14 ':' $@15 return_type $@16 ';'
+
+    ID  shift, and go to state 30
+
+
+State 18
+
+   19 procedure_header_common: PROCEDURE . $@5 ID
+
+    $default  reduce using rule 18 ($@5)
+
+    $@5  go to state 31
+
+
+State 19
+
+   10 procedure_function_decl_part: procedure_function_decl_part procedure_or_function . ';'
+
+    ';'  shift, and go to state 32
+
+
+State 20
+
+   11 procedure_or_function: procedure_decl .
+
+    $default  reduce using rule 11 (procedure_or_function)
+
+
+State 21
+
+   13 procedure_decl: procedure_header . block_
+
+    error  shift, and go to state 33
+
+    FUNCTION   reduce using rule 9 (procedure_function_decl_part)
+    PROCEDURE  reduce using rule 9 (procedure_function_decl_part)
+    _BEGIN     reduce using rule 9 (procedure_function_decl_part)
+    VAR        reduce using rule 9 (procedure_function_decl_part)
+
+    block_                        go to state 34
+    procedure_function_decl_part  go to state 35
+
+
+State 22
+
+   14 procedure_header: procedure_header_common . ';'
+   17                 | procedure_header_common . '(' $@3 formal_parameter_section_list ')' $@4 ';'
+
+    ';'  shift, and go to state 36
+    '('  shift, and go to state 37
+
+
+State 23
+
+   12 procedure_or_function: function_decl .
+
+    $default  reduce using rule 12 (procedure_or_function)
+
+
+State 24
+
+   33 function_decl: function_header . block_
+
+    error  shift, and go to state 33
+
+    FUNCTION   reduce using rule 9 (procedure_function_decl_part)
+    PROCEDURE  reduce using rule 9 (procedure_function_decl_part)
+    _BEGIN     reduce using rule 9 (procedure_function_decl_part)
+    VAR        reduce using rule 9 (procedure_function_decl_part)
+
+    block_                        go to state 38
+    procedure_function_decl_part  go to state 35
+
+
+State 25
+
+    5 block: procedure_function_decl_part var_decl_part . statement_part
+
+    _BEGIN  shift, and go to state 27
+
+    statement_part            go to state 39
+    first_compound_statement  go to state 29
+
+
+State 26
+
+   46 var_decl_part: VAR $@17 . var_decl var_decl_rept EOSE
+
+    ID  shift, and go to state 40
+
+    var_decl  go to state 41
+    ID_list   go to state 42
+
+
+State 27
+
+  149 first_compound_statement: _BEGIN . $@44 statement rept_statement $@45 END $@46 '.'
+
+    $default  reduce using rule 146 ($@44)
+
+    $@44  go to state 43
+
+
+State 28
+
+    6 block: error var_decl_part statement_part .
+
+    $default  reduce using rule 6 (block)
+
+
+State 29
+
+   79 statement_part: first_compound_statement .
+
+    $default  reduce using rule 79 (statement_part)
+
+
+State 30
+
+   37 function_header: FUNCTION ID . $@9 ':' $@10 return_type $@11 ';'
+   43                | FUNCTION ID . $@12 '(' $@13 formal_parameter_section_list ')' $@14 ':' $@15 return_type $@16 ';'
+
+    '('       reduce using rule 38 ($@12)
+    $default  reduce using rule 34 ($@9)
+
+    $@9   go to state 44
+    $@12  go to state 45
+
+
+State 31
+
+   19 procedure_header_common: PROCEDURE $@5 . ID
+
+    ID  shift, and go to state 46
+
+
+State 32
+
+   10 procedure_function_decl_part: procedure_function_decl_part procedure_or_function ';' .
+
+    $default  reduce using rule 10 (procedure_function_decl_part)
+
+
+State 33
+
+    8 block_: error . var_decl_part statement_part_
+
+    VAR  shift, and go to state 15
+
+    $default  reduce using rule 44 (var_decl_part)
+
+    var_decl_part  go to state 47
+
+
+State 34
+
+   13 procedure_decl: procedure_header block_ .
+
+    $default  reduce using rule 13 (procedure_decl)
+
+
+State 35
+
+    7 block_: procedure_function_decl_part . var_decl_part statement_part_
+   10 procedure_function_decl_part: procedure_function_decl_part . procedure_or_function ';'
+
+    FUNCTION   shift, and go to state 17
+    PROCEDURE  shift, and go to state 18
+    VAR        shift, and go to state 15
+
+    $default  reduce using rule 44 (var_decl_part)
+
+    procedure_or_function    go to state 19
+    procedure_decl           go to state 20
+    procedure_header         go to state 21
+    procedure_header_common  go to state 22
+    function_decl            go to state 23
+    function_header          go to state 24
+    var_decl_part            go to state 48
+
+
+State 36
+
+   14 procedure_header: procedure_header_common ';' .
+
+    $default  reduce using rule 14 (procedure_header)
+
+
+State 37
+
+   17 procedure_header: procedure_header_common '(' . $@3 formal_parameter_section_list ')' $@4 ';'
+
+    $default  reduce using rule 15 ($@3)
+
+    $@3  go to state 49
+
+
+State 38
+
+   33 function_decl: function_header block_ .
+
+    $default  reduce using rule 33 (function_decl)
+
+
+State 39
+
+    5 block: procedure_function_decl_part var_decl_part statement_part .
+
+    $default  reduce using rule 5 (block)
+
+
+State 40
+
+   76 ID_list: ID . $@26 ID_list_rept
+
+    $default  reduce using rule 75 ($@26)
+
+    $@26  go to state 50
+
+
+State 41
+
+   46 var_decl_part: VAR $@17 var_decl . var_decl_rept EOSE
+
+    $default  reduce using rule 50 (var_decl_rept)
+
+    var_decl_rept  go to state 51
+
+
+State 42
+
+   48 var_decl: ID_list . ':' $@18 type
+   49         | ID_list . error type
+
+    error  shift, and go to state 52
+    ':'    shift, and go to state 53
+
+
+State 43
+
+  149 first_compound_statement: _BEGIN $@44 . statement rept_statement $@45 END $@46 '.'
+
+    IF                shift, and go to state 54
+    CASE              shift, and go to state 55
+    _BEGIN            shift, and go to state 56
+    WHILE             shift, and go to state 57
+    REPEAT            shift, and go to state 58
+    FOR               shift, and go to state 59
+    WITH              shift, and go to state 60
+    FLOAT             shift, and go to state 61
+    INT               shift, and go to state 62
+    STRING            shift, and go to state 63
+    ID                shift, and go to state 64
+    BUILTIN_FUNCTION  shift, and go to state 65
+
+    $default  reduce using rule 135 (statement)
+
+    variable               go to state 66
+    entire_variable        go to state 67
+    indexed_variable       go to state 68
+    if_statement           go to state 69
+    case_statement         go to state 70
+    statement              go to state 71
+    assignment_statement   go to state 72
+    structured_statement   go to state 73
+    compound_statement     go to state 74
+    conditional_statement  go to state 75
+    reptive_statement      go to state 76
+    while_stat             go to state 77
+    rept_stat              go to state 78
+    for_stat               go to state 79
+    with_statement         go to state 80
+    procedure_statement    go to state 81
+
+
+State 44
+
+   37 function_header: FUNCTION ID $@9 . ':' $@10 return_type $@11 ';'
+
+    ':'  shift, and go to state 82
+
+
+State 45
+
+   43 function_header: FUNCTION ID $@12 . '(' $@13 formal_parameter_section_list ')' $@14 ':' $@15 return_type $@16 ';'
+
+    '('  shift, and go to state 83
+
+
+State 46
+
+   19 procedure_header_common: PROCEDURE $@5 ID .
+
+    $default  reduce using rule 19 (procedure_header_common)
+
+
+State 47
+
+    8 block_: error var_decl_part . statement_part_
+
+    _BEGIN  shift, and go to state 56
+
+    statement_part_     go to state 84
+    compound_statement  go to state 85
+
+
+State 48
+
+    7 block_: procedure_function_decl_part var_decl_part . statement_part_
+
+    _BEGIN  shift, and go to state 56
+
+    statement_part_     go to state 86
+    compound_statement  go to state 85
+
+
+State 49
+
+   17 procedure_header: procedure_header_common '(' $@3 . formal_parameter_section_list ')' $@4 ';'
+
+    VAR  shift, and go to state 87
+    ID   shift, and go to state 40
+
+    formal_parameter_section_list  go to state 88
+    formal_parameter_section       go to state 89
+    parameter_group                go to state 90
+    ID_list                        go to state 91
+
+
+State 50
+
+   76 ID_list: ID $@26 . ID_list_rept
+
+    $default  reduce using rule 77 (ID_list_rept)
+
+    ID_list_rept  go to state 92
+
+
+State 51
+
+   46 var_decl_part: VAR $@17 var_decl var_decl_rept . EOSE
+   51 var_decl_rept: var_decl_rept . EOSE var_decl
+
+    ';'  shift, and go to state 93
+
+    EOSE  go to state 94
+
+
+State 52
+
+   49 var_decl: ID_list error . type
+
+    ARRAY  shift, and go to state 95
+    FLOAT  shift, and go to state 96
+    INT    shift, and go to state 97
+    ID     shift, and go to state 98
+    TYPE   shift, and go to state 99
+    '('    shift, and go to state 100
+
+    type             go to state 101
+    simple_type      go to state 102
+    scalar_type      go to state 103
+    subrange_type    go to state 104
+    const            go to state 105
+    type_identifier  go to state 106
+    structured_type  go to state 107
+    array_type       go to state 108
+
+
+State 53
+
+   48 var_decl: ID_list ':' . $@18 type
+
+    $default  reduce using rule 47 ($@18)
+
+    $@18  go to state 109
+
+
+State 54
+
+  118 if_statement: IF . $@38 expression THEN $@39 statement else
+
+    $default  reduce using rule 116 ($@38)
+
+    $@38  go to state 110
+
+
+State 55
+
+  122 case_statement: CASE . expression OF case_list_element case_list_rept END
+
+    LOGICALNOT        shift, and go to state 111
+    FLOAT             shift, and go to state 61
+    INT               shift, and go to state 62
+    STRING            shift, and go to state 63
+    ID                shift, and go to state 112
+    BUILTIN_FUNCTION  shift, and go to state 113
+    '('               shift, and go to state 114
+
+    expression           go to state 115
+    simple_expression    go to state 116
+    term                 go to state 117
+    factor               go to state 118
+    variable             go to state 119
+    entire_variable      go to state 67
+    indexed_variable     go to state 68
+    function_designator  go to state 120
+
+
+State 56
+
+  151 compound_statement: _BEGIN . $@47 statement rept_statement END
+
+    $default  reduce using rule 150 ($@47)
+
+    $@47  go to state 121
+
+
+State 57
+
+  161 while_stat: WHILE . $@48 expression DO $@49 statement
+
+    $default  reduce using rule 159 ($@48)
+
+    $@48  go to state 122
+
+
+State 58
+
+  164 rept_stat: REPEAT . $@50 statement rept_rept_stat UNTIL $@51 expression
+
+    $default  reduce using rule 162 ($@50)
+
+    $@50  go to state 123
+
+
+State 59
+
+  171 for_stat: FOR . $@52 ID $@53 ASSIGN $@54 for_list DO $@55 statement
+
+    $default  reduce using rule 167 ($@52)
+
+    $@52  go to state 124
+
+
+State 60
+
+  178 with_statement: WITH . $@58 variable_list DO $@59 statement
+
+    $default  reduce using rule 176 ($@58)
+
+    $@58  go to state 125
+
+
+State 61
+
+   99 entire_variable: FLOAT .
+
+    $default  reduce using rule 99 (entire_variable)
+
+
+State 62
+
+   98 entire_variable: INT .
+
+    $default  reduce using rule 98 (entire_variable)
+
+
+State 63
+
+  100 entire_variable: STRING .
+
+    $default  reduce using rule 100 (entire_variable)
+
+
+State 64
+
+  101 entire_variable: ID .
+
+    $default  reduce using rule 101 (entire_variable)
+
+
+State 65
+
+  183 procedure_statement: BUILTIN_FUNCTION .
+  186                    | BUILTIN_FUNCTION . $@61 '(' $@62 actual_parameter actual_parameter_list ')'
+
+    '('       reduce using rule 184 ($@61)
+    $default  reduce using rule 183 (procedure_statement)
+
+    $@61  go to state 126
+
+
+State 66
+
+  103 indexed_variable: variable . '[' $@32 expression ']'
+  140 assignment_statement: variable . ASSIGN $@43 expression
+  141                     | variable . error expression
+
+    error   shift, and go to state 127
+    ASSIGN  shift, and go to state 128
+    '['     shift, and go to state 129
+
+
+State 67
+
+   96 variable: entire_variable .
+
+    $default  reduce using rule 96 (variable)
+
+
+State 68
+
+   97 variable: indexed_variable .
+
+    $default  reduce using rule 97 (variable)
+
+
+State 69
+
+  152 conditional_statement: if_statement .
+
+    $default  reduce using rule 152 (conditional_statement)
+
+
+State 70
+
+  153 conditional_statement: case_statement .
+
+    $default  reduce using rule 153 (conditional_statement)
+
+
+State 71
+
+  149 first_compound_statement: _BEGIN $@44 statement . rept_statement $@45 END $@46 '.'
+
+    $default  reduce using rule 154 (rept_statement)
+
+    rept_statement  go to state 130
+
+
+State 72
+
+  137 statement: assignment_statement .
+
+    $default  reduce using rule 137 (statement)
+
+
+State 73
+
+  136 statement: structured_statement .
+
+    $default  reduce using rule 136 (statement)
+
+
+State 74
+
+  142 structured_statement: compound_statement .
+
+    $default  reduce using rule 142 (structured_statement)
+
+
+State 75
+
+  143 structured_statement: conditional_statement .
+
+    $default  reduce using rule 143 (structured_statement)
+
+
+State 76
+
+  144 structured_statement: reptive_statement .
+
+    $default  reduce using rule 144 (structured_statement)
+
+
+State 77
+
+  156 reptive_statement: while_stat .
+
+    $default  reduce using rule 156 (reptive_statement)
+
+
+State 78
+
+  157 reptive_statement: rept_stat .
+
+    $default  reduce using rule 157 (reptive_statement)
+
+
+State 79
+
+  158 reptive_statement: for_stat .
+
+    $default  reduce using rule 158 (reptive_statement)
+
+
+State 80
+
+  145 structured_statement: with_statement .
+
+    $default  reduce using rule 145 (structured_statement)
+
+
+State 81
+
+  138 statement: procedure_statement .
+
+    $default  reduce using rule 138 (statement)
+
+
+State 82
+
+   37 function_header: FUNCTION ID $@9 ':' . $@10 return_type $@11 ';'
+
+    $default  reduce using rule 35 ($@10)
+
+    $@10  go to state 131
+
+
+State 83
+
+   43 function_header: FUNCTION ID $@12 '(' . $@13 formal_parameter_section_list ')' $@14 ':' $@15 return_type $@16 ';'
+
+    $default  reduce using rule 39 ($@13)
+
+    $@13  go to state 132
+
+
+State 84
+
+    8 block_: error var_decl_part statement_part_ .
+
+    $default  reduce using rule 8 (block_)
+
+
+State 85
+
+   80 statement_part_: compound_statement .
+
+    $default  reduce using rule 80 (statement_part_)
+
+
+State 86
+
+    7 block_: procedure_function_decl_part var_decl_part statement_part_ .
+
+    $default  reduce using rule 7 (block_)
+
+
+State 87
+
+   26 formal_parameter_section: VAR . $@7 parameter_group
+
+    $default  reduce using rule 25 ($@7)
+
+    $@7  go to state 133
+
+
+State 88
+
+   17 procedure_header: procedure_header_common '(' $@3 formal_parameter_section_list . ')' $@4 ';'
+
+    ')'  shift, and go to state 134
+
+
+State 89
+
+   20 formal_parameter_section_list: formal_parameter_section . formal_parameter_section_rept
+
+    $default  reduce using rule 21 (formal_parameter_section_rept)
+
+    formal_parameter_section_rept  go to state 135
+
+
+State 90
+
+   24 formal_parameter_section: parameter_group .
+
+    $default  reduce using rule 24 (formal_parameter_section)
+
+
+State 91
+
+   28 parameter_group: ID_list . ':' $@8 parameter_type
+
+    ':'  shift, and go to state 136
+
+
+State 92
+
+   76 ID_list: ID $@26 ID_list_rept .
+   78 ID_list_rept: ID_list_rept . ',' ID
+
+    ','  shift, and go to state 137
+
+    $default  reduce using rule 76 (ID_list)
+
+
+State 93
+
+  115 EOSE: ';' .
+
+    $default  reduce using rule 115 (EOSE)
+
+
+State 94
+
+   46 var_decl_part: VAR $@17 var_decl var_decl_rept EOSE .
+   51 var_decl_rept: var_decl_rept EOSE . var_decl
+
+    ID  shift, and go to state 40
+
+    $default  reduce using rule 46 (var_decl_part)
+
+    var_decl  go to state 138
+    ID_list   go to state 42
+
+
+State 95
+
+   70 array_type: ARRAY . $@21 '[' $@22 index_type index_type_rept ']' $@23 OF $@24 type
+
+    $default  reduce using rule 66 ($@21)
+
+    $@21  go to state 139
+
+
+State 96
+
+   62 const: FLOAT .
+
+    $default  reduce using rule 62 (const)
+
+
+State 97
+
+   61 const: INT .
+
+    $default  reduce using rule 61 (const)
+
+
+State 98
+
+   63 const: ID .
+
+    $default  reduce using rule 63 (const)
+
+
+State 99
+
+   64 type_identifier: TYPE .
+
+    $default  reduce using rule 64 (type_identifier)
+
+
+State 100
+
+   58 scalar_type: '(' . $@19 ID_list ')'
+
+    $default  reduce using rule 57 ($@19)
+
+    $@19  go to state 140
+
+
+State 101
+
+   49 var_decl: ID_list error type .
+
+    $default  reduce using rule 49 (var_decl)
+
+
+State 102
+
+   52 type: simple_type .
+
+    $default  reduce using rule 52 (type)
+
+
+State 103
+
+   54 simple_type: scalar_type .
+
+    $default  reduce using rule 54 (simple_type)
+
+
+State 104
+
+   55 simple_type: subrange_type .
+
+    $default  reduce using rule 55 (simple_type)
+
+
+State 105
+
+   60 subrange_type: const . '.' '.' $@20 const
+
+    '.'  shift, and go to state 141
+
+
+State 106
+
+   56 simple_type: type_identifier .
+
+    $default  reduce using rule 56 (simple_type)
+
+
+State 107
+
+   53 type: structured_type .
+
+    $default  reduce using rule 53 (type)
+
+
+State 108
+
+   65 structured_type: array_type .
+
+    $default  reduce using rule 65 (structured_type)
+
+
+State 109
+
+   48 var_decl: ID_list ':' $@18 . type
+
+    ARRAY  shift, and go to state 95
+    FLOAT  shift, and go to state 96
+    INT    shift, and go to state 97
+    ID     shift, and go to state 98
+    TYPE   shift, and go to state 99
+    '('    shift, and go to state 100
+
+    type             go to state 142
+    simple_type      go to state 102
+    scalar_type      go to state 103
+    subrange_type    go to state 104
+    const            go to state 105
+    type_identifier  go to state 106
+    structured_type  go to state 107
+    array_type       go to state 108
+
+
+State 110
+
+  118 if_statement: IF $@38 . expression THEN $@39 statement else
+
+    LOGICALNOT        shift, and go to state 111
+    FLOAT             shift, and go to state 61
+    INT               shift, and go to state 62
+    STRING            shift, and go to state 63
+    ID                shift, and go to state 112
+    BUILTIN_FUNCTION  shift, and go to state 113
+    '('               shift, and go to state 114
+
+    expression           go to state 143
+    simple_expression    go to state 116
+    term                 go to state 117
+    factor               go to state 118
+    variable             go to state 119
+    entire_variable      go to state 67
+    indexed_variable     go to state 68
+    function_designator  go to state 120
+
+
+State 111
+
+   94 factor: LOGICALNOT . $@31 factor
+
+    $default  reduce using rule 93 ($@31)
+
+    $@31  go to state 144
+
+
+State 112
+
+  101 entire_variable: ID .
+  110 function_designator: ID . $@35 '(' $@36 actual_parameter actual_parameter_list ')'
+
+    '('       reduce using rule 108 ($@35)
+    $default  reduce using rule 101 (entire_variable)
+
+    $@35  go to state 145
+
+
+State 113
+
+  104 function_designator: BUILTIN_FUNCTION .
+  107                    | BUILTIN_FUNCTION . $@33 '(' $@34 actual_parameter actual_parameter_list ')'
+
+    '('       reduce using rule 105 ($@33)
+    $default  reduce using rule 104 (function_designator)
+
+    $@33  go to state 146
+
+
+State 114
+
+   92 factor: '(' . $@30 expression ')'
+
+    $default  reduce using rule 91 ($@30)
+
+    $@30  go to state 147
+
+
+State 115
+
+  122 case_statement: CASE expression . OF case_list_element case_list_rept END
+
+    OF  shift, and go to state 148
+
+
+State 116
+
+   81 expression: simple_expression .
+   83           | simple_expression . RELATIONAL_OP $@27 simple_expression
+   86 simple_expression: simple_expression . ADD_OP $@28 term
+
+    RELATIONAL_OP  shift, and go to state 149
+    ADD_OP         shift, and go to state 150
+
+    $default  reduce using rule 81 (expression)
+
+
+State 117
+
+   84 simple_expression: term .
+   89 term: term . MUL_OP $@29 factor
+
+    MUL_OP  shift, and go to state 151
+
+    $default  reduce using rule 84 (simple_expression)
+
+
+State 118
+
+   87 term: factor .
+
+    $default  reduce using rule 87 (term)
+
+
+State 119
+
+   90 factor: variable .
+  103 indexed_variable: variable . '[' $@32 expression ']'
+
+    '['  shift, and go to state 129
+
+    $default  reduce using rule 90 (factor)
+
+
+State 120
+
+   95 factor: function_designator .
+
+    $default  reduce using rule 95 (factor)
+
+
+State 121
+
+  151 compound_statement: _BEGIN $@47 . statement rept_statement END
+
+    IF                shift, and go to state 54
+    CASE              shift, and go to state 55
+    _BEGIN            shift, and go to state 56
+    WHILE             shift, and go to state 57
+    REPEAT            shift, and go to state 58
+    FOR               shift, and go to state 59
+    WITH              shift, and go to state 60
+    FLOAT             shift, and go to state 61
+    INT               shift, and go to state 62
+    STRING            shift, and go to state 63
+    ID                shift, and go to state 64
+    BUILTIN_FUNCTION  shift, and go to state 65
+
+    $default  reduce using rule 135 (statement)
+
+    variable               go to state 66
+    entire_variable        go to state 67
+    indexed_variable       go to state 68
+    if_statement           go to state 69
+    case_statement         go to state 70
+    statement              go to state 152
+    assignment_statement   go to state 72
+    structured_statement   go to state 73
+    compound_statement     go to state 74
+    conditional_statement  go to state 75
+    reptive_statement      go to state 76
+    while_stat             go to state 77
+    rept_stat              go to state 78
+    for_stat               go to state 79
+    with_statement         go to state 80
+    procedure_statement    go to state 81
+
+
+State 122
+
+  161 while_stat: WHILE $@48 . expression DO $@49 statement
+
+    LOGICALNOT        shift, and go to state 111
+    FLOAT             shift, and go to state 61
+    INT               shift, and go to state 62
+    STRING            shift, and go to state 63
+    ID                shift, and go to state 112
+    BUILTIN_FUNCTION  shift, and go to state 113
+    '('               shift, and go to state 114
+
+    expression           go to state 153
+    simple_expression    go to state 116
+    term                 go to state 117
+    factor               go to state 118
+    variable             go to state 119
+    entire_variable      go to state 67
+    indexed_variable     go to state 68
+    function_designator  go to state 120
+
+
+State 123
+
+  164 rept_stat: REPEAT $@50 . statement rept_rept_stat UNTIL $@51 expression
+
+    IF                shift, and go to state 54
+    CASE              shift, and go to state 55
+    _BEGIN            shift, and go to state 56
+    WHILE             shift, and go to state 57
+    REPEAT            shift, and go to state 58
+    FOR               shift, and go to state 59
+    WITH              shift, and go to state 60
+    FLOAT             shift, and go to state 61
+    INT               shift, and go to state 62
+    STRING            shift, and go to state 63
+    ID                shift, and go to state 64
+    BUILTIN_FUNCTION  shift, and go to state 65
+
+    $default  reduce using rule 135 (statement)
+
+    variable               go to state 66
+    entire_variable        go to state 67
+    indexed_variable       go to state 68
+    if_statement           go to state 69
+    case_statement         go to state 70
+    statement              go to state 154
+    assignment_statement   go to state 72
+    structured_statement   go to state 73
+    compound_statement     go to state 74
+    conditional_statement  go to state 75
+    reptive_statement      go to state 76
+    while_stat             go to state 77
+    rept_stat              go to state 78
+    for_stat               go to state 79
+    with_statement         go to state 80
+    procedure_statement    go to state 81
+
+
+State 124
+
+  171 for_stat: FOR $@52 . ID $@53 ASSIGN $@54 for_list DO $@55 statement
+
+    ID  shift, and go to state 155
+
+
+State 125
+
+  178 with_statement: WITH $@58 . variable_list DO $@59 statement
+
+    FLOAT   shift, and go to state 61
+    INT     shift, and go to state 62
+    STRING  shift, and go to state 63
+    ID      shift, and go to state 64
+
+    variable          go to state 156
+    entire_variable   go to state 67
+    indexed_variable  go to state 68
+    variable_list     go to state 157
+
+
+State 126
+
+  186 procedure_statement: BUILTIN_FUNCTION $@61 . '(' $@62 actual_parameter actual_parameter_list ')'
+
+    '('  shift, and go to state 158
+
+
+State 127
+
+  141 assignment_statement: variable error . expression
+
+    LOGICALNOT        shift, and go to state 111
+    FLOAT             shift, and go to state 61
+    INT               shift, and go to state 62
+    STRING            shift, and go to state 63
+    ID                shift, and go to state 112
+    BUILTIN_FUNCTION  shift, and go to state 113
+    '('               shift, and go to state 114
+
+    expression           go to state 159
+    simple_expression    go to state 116
+    term                 go to state 117
+    factor               go to state 118
+    variable             go to state 119
+    entire_variable      go to state 67
+    indexed_variable     go to state 68
+    function_designator  go to state 120
+
+
+State 128
+
+  140 assignment_statement: variable ASSIGN . $@43 expression
+
+    $default  reduce using rule 139 ($@43)
+
+    $@43  go to state 160
+
+
+State 129
+
+  103 indexed_variable: variable '[' . $@32 expression ']'
+
+    $default  reduce using rule 102 ($@32)
+
+    $@32  go to state 161
+
+
+State 130
+
+  149 first_compound_statement: _BEGIN $@44 statement rept_statement . $@45 END $@46 '.'
+  155 rept_statement: rept_statement . EOSE statement
+
+    ';'  shift, and go to state 93
+
+    $default  reduce using rule 147 ($@45)
+
+    EOSE  go to state 162
+    $@45  go to state 163
+
+
+State 131
+
+   37 function_header: FUNCTION ID $@9 ':' $@10 . return_type $@11 ';'
+
+    ARRAY  shift, and go to state 95
+    TYPE   shift, and go to state 99
+
+    return_type      go to state 164
+    type_identifier  go to state 165
+    structured_type  go to state 166
+    array_type       go to state 108
+
+
+State 132
+
+   43 function_header: FUNCTION ID $@12 '(' $@13 . formal_parameter_section_list ')' $@14 ':' $@15 return_type $@16 ';'
+
+    VAR  shift, and go to state 87
+    ID   shift, and go to state 40
+
+    formal_parameter_section_list  go to state 167
+    formal_parameter_section       go to state 89
+    parameter_group                go to state 90
+    ID_list                        go to state 91
+
+
+State 133
+
+   26 formal_parameter_section: VAR $@7 . parameter_group
+
+    ID  shift, and go to state 40
+
+    parameter_group  go to state 168
+    ID_list          go to state 91
+
+
+State 134
+
+   17 procedure_header: procedure_header_common '(' $@3 formal_parameter_section_list ')' . $@4 ';'
+
+    $default  reduce using rule 16 ($@4)
+
+    $@4  go to state 169
+
+
+State 135
+
+   20 formal_parameter_section_list: formal_parameter_section formal_parameter_section_rept .
+   23 formal_parameter_section_rept: formal_parameter_section_rept . ';' $@6 formal_parameter_section
+
+    ';'  shift, and go to state 170
+
+    $default  reduce using rule 20 (formal_parameter_section_list)
+
+
+State 136
+
+   28 parameter_group: ID_list ':' . $@8 parameter_type
+
+    $default  reduce using rule 27 ($@8)
+
+    $@8  go to state 171
+
+
+State 137
+
+   78 ID_list_rept: ID_list_rept ',' . ID
+
+    ID  shift, and go to state 172
+
+
+State 138
+
+   51 var_decl_rept: var_decl_rept EOSE var_decl .
+
+    $default  reduce using rule 51 (var_decl_rept)
+
+
+State 139
+
+   70 array_type: ARRAY $@21 . '[' $@22 index_type index_type_rept ']' $@23 OF $@24 type
+
+    '['  shift, and go to state 173
+
+
+State 140
+
+   58 scalar_type: '(' $@19 . ID_list ')'
+
+    ID  shift, and go to state 40
+
+    ID_list  go to state 174
+
+
+State 141
+
+   60 subrange_type: const '.' . '.' $@20 const
+
+    '.'  shift, and go to state 175
+
+
+State 142
+
+   48 var_decl: ID_list ':' $@18 type .
+
+    $default  reduce using rule 48 (var_decl)
+
+
+State 143
+
+  118 if_statement: IF $@38 expression . THEN $@39 statement else
+
+    THEN  shift, and go to state 176
+
+
+State 144
+
+   94 factor: LOGICALNOT $@31 . factor
+
+    LOGICALNOT        shift, and go to state 111
+    FLOAT             shift, and go to state 61
+    INT               shift, and go to state 62
+    STRING            shift, and go to state 63
+    ID                shift, and go to state 112
+    BUILTIN_FUNCTION  shift, and go to state 113
+    '('               shift, and go to state 114
+
+    factor               go to state 177
+    variable             go to state 119
+    entire_variable      go to state 67
+    indexed_variable     go to state 68
+    function_designator  go to state 120
+
+
+State 145
+
+  110 function_designator: ID $@35 . '(' $@36 actual_parameter actual_parameter_list ')'
+
+    '('  shift, and go to state 178
+
+
+State 146
+
+  107 function_designator: BUILTIN_FUNCTION $@33 . '(' $@34 actual_parameter actual_parameter_list ')'
+
+    '('  shift, and go to state 179
+
+
+State 147
+
+   92 factor: '(' $@30 . expression ')'
+
+    LOGICALNOT        shift, and go to state 111
+    FLOAT             shift, and go to state 61
+    INT               shift, and go to state 62
+    STRING            shift, and go to state 63
+    ID                shift, and go to state 112
+    BUILTIN_FUNCTION  shift, and go to state 113
+    '('               shift, and go to state 114
+
+    expression           go to state 180
+    simple_expression    go to state 116
+    term                 go to state 117
+    factor               go to state 118
+    variable             go to state 119
+    entire_variable      go to state 67
+    indexed_variable     go to state 68
+    function_designator  go to state 120
+
+
+State 148
+
+  122 case_statement: CASE expression OF . case_list_element case_list_rept END
+
+    INT     shift, and go to state 181
+    STRING  shift, and go to state 182
+    ID      shift, and go to state 183
+
+    $default  reduce using rule 125 (case_list_element)
+
+    case_list_element  go to state 184
+    case_label_list    go to state 185
+    case_label         go to state 186
+
+
+State 149
+
+   83 expression: simple_expression RELATIONAL_OP . $@27 simple_expression
+
+    $default  reduce using rule 82 ($@27)
+
+    $@27  go to state 187
+
+
+State 150
+
+   86 simple_expression: simple_expression ADD_OP . $@28 term
+
+    $default  reduce using rule 85 ($@28)
+
+    $@28  go to state 188
+
+
+State 151
+
+   89 term: term MUL_OP . $@29 factor
+
+    $default  reduce using rule 88 ($@29)
+
+    $@29  go to state 189
+
+
+State 152
+
+  151 compound_statement: _BEGIN $@47 statement . rept_statement END
+
+    $default  reduce using rule 154 (rept_statement)
+
+    rept_statement  go to state 190
+
+
+State 153
+
+  161 while_stat: WHILE $@48 expression . DO $@49 statement
+
+    DO  shift, and go to state 191
+
+
+State 154
+
+  164 rept_stat: REPEAT $@50 statement . rept_rept_stat UNTIL $@51 expression
+
+    $default  reduce using rule 165 (rept_rept_stat)
+
+    rept_rept_stat  go to state 192
+
+
+State 155
+
+  171 for_stat: FOR $@52 ID . $@53 ASSIGN $@54 for_list DO $@55 statement
+
+    $default  reduce using rule 168 ($@53)
+
+    $@53  go to state 193
+
+
+State 156
+
+  103 indexed_variable: variable . '[' $@32 expression ']'
+  179 variable_list: variable . variable_list_rept
+
+    '['  shift, and go to state 129
+
+    $default  reduce using rule 180 (variable_list_rept)
+
+    variable_list_rept  go to state 194
+
+
+State 157
+
+  178 with_statement: WITH $@58 variable_list . DO $@59 statement
+
+    DO  shift, and go to state 195
+
+
+State 158
+
+  186 procedure_statement: BUILTIN_FUNCTION $@61 '(' . $@62 actual_parameter actual_parameter_list ')'
+
+    $default  reduce using rule 185 ($@62)
+
+    $@62  go to state 196
+
+
+State 159
+
+  141 assignment_statement: variable error expression .
+
+    $default  reduce using rule 141 (assignment_statement)
+
+
+State 160
+
+  140 assignment_statement: variable ASSIGN $@43 . expression
+
+    LOGICALNOT        shift, and go to state 111
+    FLOAT             shift, and go to state 61
+    INT               shift, and go to state 62
+    STRING            shift, and go to state 63
+    ID                shift, and go to state 112
+    BUILTIN_FUNCTION  shift, and go to state 113
+    '('               shift, and go to state 114
+
+    expression           go to state 197
+    simple_expression    go to state 116
+    term                 go to state 117
+    factor               go to state 118
+    variable             go to state 119
+    entire_variable      go to state 67
+    indexed_variable     go to state 68
+    function_designator  go to state 120
+
+
+State 161
+
+  103 indexed_variable: variable '[' $@32 . expression ']'
+
+    LOGICALNOT        shift, and go to state 111
+    FLOAT             shift, and go to state 61
+    INT               shift, and go to state 62
+    STRING            shift, and go to state 63
+    ID                shift, and go to state 112
+    BUILTIN_FUNCTION  shift, and go to state 113
+    '('               shift, and go to state 114
+
+    expression           go to state 198
+    simple_expression    go to state 116
+    term                 go to state 117
+    factor               go to state 118
+    variable             go to state 119
+    entire_variable      go to state 67
+    indexed_variable     go to state 68
+    function_designator  go to state 120
+
+
+State 162
+
+  155 rept_statement: rept_statement EOSE . statement
+
+    IF                shift, and go to state 54
+    CASE              shift, and go to state 55
+    _BEGIN            shift, and go to state 56
+    WHILE             shift, and go to state 57
+    REPEAT            shift, and go to state 58
+    FOR               shift, and go to state 59
+    WITH              shift, and go to state 60
+    FLOAT             shift, and go to state 61
+    INT               shift, and go to state 62
+    STRING            shift, and go to state 63
+    ID                shift, and go to state 64
+    BUILTIN_FUNCTION  shift, and go to state 65
+
+    $default  reduce using rule 135 (statement)
+
+    variable               go to state 66
+    entire_variable        go to state 67
+    indexed_variable       go to state 68
+    if_statement           go to state 69
+    case_statement         go to state 70
+    statement              go to state 199
+    assignment_statement   go to state 72
+    structured_statement   go to state 73
+    compound_statement     go to state 74
+    conditional_statement  go to state 75
+    reptive_statement      go to state 76
+    while_stat             go to state 77
+    rept_stat              go to state 78
+    for_stat               go to state 79
+    with_statement         go to state 80
+    procedure_statement    go to state 81
+
+
+State 163
+
+  149 first_compound_statement: _BEGIN $@44 statement rept_statement $@45 . END $@46 '.'
+
+    END  shift, and go to state 200
+
+
+State 164
+
+   37 function_header: FUNCTION ID $@9 ':' $@10 return_type . $@11 ';'
+
+    $default  reduce using rule 36 ($@11)
+
+    $@11  go to state 201
+
+
+State 165
+
+   31 return_type: type_identifier .
+
+    $default  reduce using rule 31 (return_type)
+
+
+State 166
+
+   32 return_type: structured_type .
+
+    $default  reduce using rule 32 (return_type)
+
+
+State 167
+
+   43 function_header: FUNCTION ID $@12 '(' $@13 formal_parameter_section_list . ')' $@14 ':' $@15 return_type $@16 ';'
+
+    ')'  shift, and go to state 202
+
+
+State 168
+
+   26 formal_parameter_section: VAR $@7 parameter_group .
+
+    $default  reduce using rule 26 (formal_parameter_section)
+
+
+State 169
+
+   17 procedure_header: procedure_header_common '(' $@3 formal_parameter_section_list ')' $@4 . ';'
+
+    ';'  shift, and go to state 203
+
+
+State 170
+
+   23 formal_parameter_section_rept: formal_parameter_section_rept ';' . $@6 formal_parameter_section
+
+    $default  reduce using rule 22 ($@6)
+
+    $@6  go to state 204
+
+
+State 171
+
+   28 parameter_group: ID_list ':' $@8 . parameter_type
+
+    ARRAY  shift, and go to state 95
+    TYPE   shift, and go to state 99
+
+    parameter_type   go to state 205
+    type_identifier  go to state 206
+    structured_type  go to state 207
+    array_type       go to state 108
+
+
+State 172
+
+   78 ID_list_rept: ID_list_rept ',' ID .
+
+    $default  reduce using rule 78 (ID_list_rept)
+
+
+State 173
+
+   70 array_type: ARRAY $@21 '[' . $@22 index_type index_type_rept ']' $@23 OF $@24 type
+
+    $default  reduce using rule 67 ($@22)
+
+    $@22  go to state 208
+
+
+State 174
+
+   58 scalar_type: '(' $@19 ID_list . ')'
+
+    ')'  shift, and go to state 209
+
+
+State 175
+
+   60 subrange_type: const '.' '.' . $@20 const
+
+    $default  reduce using rule 59 ($@20)
+
+    $@20  go to state 210
+
+
+State 176
+
+  118 if_statement: IF $@38 expression THEN . $@39 statement else
+
+    $default  reduce using rule 117 ($@39)
+
+    $@39  go to state 211
+
+
+State 177
+
+   94 factor: LOGICALNOT $@31 factor .
+
+    $default  reduce using rule 94 (factor)
+
+
+State 178
+
+  110 function_designator: ID $@35 '(' . $@36 actual_parameter actual_parameter_list ')'
+
+    $default  reduce using rule 109 ($@36)
+
+    $@36  go to state 212
+
+
+State 179
+
+  107 function_designator: BUILTIN_FUNCTION $@33 '(' . $@34 actual_parameter actual_parameter_list ')'
+
+    $default  reduce using rule 106 ($@34)
+
+    $@34  go to state 213
+
+
+State 180
+
+   92 factor: '(' $@30 expression . ')'
+
+    ')'  shift, and go to state 214
+
+
+State 181
+
+  132 case_label: INT .
+
+    $default  reduce using rule 132 (case_label)
+
+
+State 182
+
+  133 case_label: STRING .
+
+    $default  reduce using rule 133 (case_label)
+
+
+State 183
+
+  134 case_label: ID .
+
+    $default  reduce using rule 134 (case_label)
+
+
+State 184
+
+  122 case_statement: CASE expression OF case_list_element . case_list_rept END
+
+    ';'  shift, and go to state 93
+
+    $default  reduce using rule 123 (case_list_rept)
+
+    EOSE            go to state 215
+    case_list_rept  go to state 216
+
+
+State 185
+
+  127 case_list_element: case_label_list . ':' $@41 statement
+
+    ':'  shift, and go to state 217
+
+
+State 186
+
+  128 case_label_list: case_label . case_label_rept
+
+    $default  reduce using rule 129 (case_label_rept)
+
+    case_label_rept  go to state 218
+
+
+State 187
+
+   83 expression: simple_expression RELATIONAL_OP $@27 . simple_expression
+
+    LOGICALNOT        shift, and go to state 111
+    FLOAT             shift, and go to state 61
+    INT               shift, and go to state 62
+    STRING            shift, and go to state 63
+    ID                shift, and go to state 112
+    BUILTIN_FUNCTION  shift, and go to state 113
+    '('               shift, and go to state 114
+
+    simple_expression    go to state 219
+    term                 go to state 117
+    factor               go to state 118
+    variable             go to state 119
+    entire_variable      go to state 67
+    indexed_variable     go to state 68
+    function_designator  go to state 120
+
+
+State 188
+
+   86 simple_expression: simple_expression ADD_OP $@28 . term
+
+    LOGICALNOT        shift, and go to state 111
+    FLOAT             shift, and go to state 61
+    INT               shift, and go to state 62
+    STRING            shift, and go to state 63
+    ID                shift, and go to state 112
+    BUILTIN_FUNCTION  shift, and go to state 113
+    '('               shift, and go to state 114
+
+    term                 go to state 220
+    factor               go to state 118
+    variable             go to state 119
+    entire_variable      go to state 67
+    indexed_variable     go to state 68
+    function_designator  go to state 120
+
+
+State 189
+
+   89 term: term MUL_OP $@29 . factor
+
+    LOGICALNOT        shift, and go to state 111
+    FLOAT             shift, and go to state 61
+    INT               shift, and go to state 62
+    STRING            shift, and go to state 63
+    ID                shift, and go to state 112
+    BUILTIN_FUNCTION  shift, and go to state 113
+    '('               shift, and go to state 114
+
+    factor               go to state 221
+    variable             go to state 119
+    entire_variable      go to state 67
+    indexed_variable     go to state 68
+    function_designator  go to state 120
+
+
+State 190
+
+  151 compound_statement: _BEGIN $@47 statement rept_statement . END
+  155 rept_statement: rept_statement . EOSE statement
+
+    END  shift, and go to state 222
+    ';'  shift, and go to state 93
+
+    EOSE  go to state 162
+
+
+State 191
+
+  161 while_stat: WHILE $@48 expression DO . $@49 statement
+
+    $default  reduce using rule 160 ($@49)
+
+    $@49  go to state 223
+
+
+State 192
+
+  164 rept_stat: REPEAT $@50 statement rept_rept_stat . UNTIL $@51 expression
+  166 rept_rept_stat: rept_rept_stat . EOSE statement
+
+    UNTIL  shift, and go to state 224
+    ';'    shift, and go to state 93
+
+    EOSE  go to state 225
+
+
+State 193
+
+  171 for_stat: FOR $@52 ID $@53 . ASSIGN $@54 for_list DO $@55 statement
+
+    ASSIGN  shift, and go to state 226
+
+
+State 194
+
+  179 variable_list: variable variable_list_rept .
+  182 variable_list_rept: variable_list_rept . ',' $@60 variable
+
+    ','  shift, and go to state 227
+
+    $default  reduce using rule 179 (variable_list)
+
+
+State 195
+
+  178 with_statement: WITH $@58 variable_list DO . $@59 statement
+
+    $default  reduce using rule 177 ($@59)
+
+    $@59  go to state 228
+
+
+State 196
+
+  186 procedure_statement: BUILTIN_FUNCTION $@61 '(' $@62 . actual_parameter actual_parameter_list ')'
+
+    LOGICALNOT        shift, and go to state 111
+    FLOAT             shift, and go to state 61
+    INT               shift, and go to state 62
+    STRING            shift, and go to state 63
+    ID                shift, and go to state 112
+    BUILTIN_FUNCTION  shift, and go to state 113
+    '('               shift, and go to state 114
+
+    expression           go to state 229
+    simple_expression    go to state 116
+    term                 go to state 117
+    factor               go to state 118
+    variable             go to state 119
+    entire_variable      go to state 67
+    indexed_variable     go to state 68
+    function_designator  go to state 120
+    actual_parameter     go to state 230
+
+
+State 197
+
+  140 assignment_statement: variable ASSIGN $@43 expression .
+
+    $default  reduce using rule 140 (assignment_statement)
+
+
+State 198
+
+  103 indexed_variable: variable '[' $@32 expression . ']'
+
+    ']'  shift, and go to state 231
+
+
+State 199
+
+  155 rept_statement: rept_statement EOSE statement .
+
+    $default  reduce using rule 155 (rept_statement)
+
+
+State 200
+
+  149 first_compound_statement: _BEGIN $@44 statement rept_statement $@45 END . $@46 '.'
+
+    $default  reduce using rule 148 ($@46)
+
+    $@46  go to state 232
+
+
+State 201
+
+   37 function_header: FUNCTION ID $@9 ':' $@10 return_type $@11 . ';'
+
+    ';'  shift, and go to state 233
+
+
+State 202
+
+   43 function_header: FUNCTION ID $@12 '(' $@13 formal_parameter_section_list ')' . $@14 ':' $@15 return_type $@16 ';'
+
+    $default  reduce using rule 40 ($@14)
+
+    $@14  go to state 234
+
+
+State 203
+
+   17 procedure_header: procedure_header_common '(' $@3 formal_parameter_section_list ')' $@4 ';' .
+
+    $default  reduce using rule 17 (procedure_header)
+
+
+State 204
+
+   23 formal_parameter_section_rept: formal_parameter_section_rept ';' $@6 . formal_parameter_section
+
+    VAR  shift, and go to state 87
+    ID   shift, and go to state 40
+
+    formal_parameter_section  go to state 235
+    parameter_group           go to state 90
+    ID_list                   go to state 91
+
+
+State 205
+
+   28 parameter_group: ID_list ':' $@8 parameter_type .
+
+    $default  reduce using rule 28 (parameter_group)
+
+
+State 206
+
+   29 parameter_type: type_identifier .
+
+    $default  reduce using rule 29 (parameter_type)
+
+
+State 207
+
+   30 parameter_type: structured_type .
+
+    $default  reduce using rule 30 (parameter_type)
+
+
+State 208
+
+   70 array_type: ARRAY $@21 '[' $@22 . index_type index_type_rept ']' $@23 OF $@24 type
+
+    FLOAT  shift, and go to state 96
+    INT    shift, and go to state 97
+    ID     shift, and go to state 98
+    TYPE   shift, and go to state 99
+    '('    shift, and go to state 100
+
+    simple_type      go to state 236
+    scalar_type      go to state 103
+    subrange_type    go to state 104
+    const            go to state 105
+    type_identifier  go to state 106
+    index_type       go to state 237
+
+
+State 209
+
+   58 scalar_type: '(' $@19 ID_list ')' .
+
+    $default  reduce using rule 58 (scalar_type)
+
+
+State 210
+
+   60 subrange_type: const '.' '.' $@20 . const
+
+    FLOAT  shift, and go to state 96
+    INT    shift, and go to state 97
+    ID     shift, and go to state 98
+
+    const  go to state 238
+
+
+State 211
+
+  118 if_statement: IF $@38 expression THEN $@39 . statement else
+
+    IF                shift, and go to state 54
+    CASE              shift, and go to state 55
+    _BEGIN            shift, and go to state 56
+    WHILE             shift, and go to state 57
+    REPEAT            shift, and go to state 58
+    FOR               shift, and go to state 59
+    WITH              shift, and go to state 60
+    FLOAT             shift, and go to state 61
+    INT               shift, and go to state 62
+    STRING            shift, and go to state 63
+    ID                shift, and go to state 64
+    BUILTIN_FUNCTION  shift, and go to state 65
+
+    $default  reduce using rule 135 (statement)
+
+    variable               go to state 66
+    entire_variable        go to state 67
+    indexed_variable       go to state 68
+    if_statement           go to state 69
+    case_statement         go to state 70
+    statement              go to state 239
+    assignment_statement   go to state 72
+    structured_statement   go to state 73
+    compound_statement     go to state 74
+    conditional_statement  go to state 75
+    reptive_statement      go to state 76
+    while_stat             go to state 77
+    rept_stat              go to state 78
+    for_stat               go to state 79
+    with_statement         go to state 80
+    procedure_statement    go to state 81
+
+
+State 212
+
+  110 function_designator: ID $@35 '(' $@36 . actual_parameter actual_parameter_list ')'
+
+    LOGICALNOT        shift, and go to state 111
+    FLOAT             shift, and go to state 61
+    INT               shift, and go to state 62
+    STRING            shift, and go to state 63
+    ID                shift, and go to state 112
+    BUILTIN_FUNCTION  shift, and go to state 113
+    '('               shift, and go to state 114
+
+    expression           go to state 229
+    simple_expression    go to state 116
+    term                 go to state 117
+    factor               go to state 118
+    variable             go to state 119
+    entire_variable      go to state 67
+    indexed_variable     go to state 68
+    function_designator  go to state 120
+    actual_parameter     go to state 240
+
+
+State 213
+
+  107 function_designator: BUILTIN_FUNCTION $@33 '(' $@34 . actual_parameter actual_parameter_list ')'
+
+    LOGICALNOT        shift, and go to state 111
+    FLOAT             shift, and go to state 61
+    INT               shift, and go to state 62
+    STRING            shift, and go to state 63
+    ID                shift, and go to state 112
+    BUILTIN_FUNCTION  shift, and go to state 113
+    '('               shift, and go to state 114
+
+    expression           go to state 229
+    simple_expression    go to state 116
+    term                 go to state 117
+    factor               go to state 118
+    variable             go to state 119
+    entire_variable      go to state 67
+    indexed_variable     go to state 68
+    function_designator  go to state 120
+    actual_parameter     go to state 241
+
+
+State 214
+
+   92 factor: '(' $@30 expression ')' .
+
+    $default  reduce using rule 92 (factor)
+
+
+State 215
+
+  124 case_list_rept: EOSE . case_list_rept
+
+    ';'  shift, and go to state 93
+
+    $default  reduce using rule 123 (case_list_rept)
+
+    EOSE            go to state 215
+    case_list_rept  go to state 242
+
+
+State 216
+
+  122 case_statement: CASE expression OF case_list_element case_list_rept . END
+
+    END  shift, and go to state 243
+
+
+State 217
+
+  127 case_list_element: case_label_list ':' . $@41 statement
+
+    $default  reduce using rule 126 ($@41)
+
+    $@41  go to state 244
+
+
+State 218
+
+  128 case_label_list: case_label case_label_rept .
+  131 case_label_rept: case_label_rept . ',' $@42 case_label
+
+    ','  shift, and go to state 245
+
+    $default  reduce using rule 128 (case_label_list)
+
+
+State 219
+
+   83 expression: simple_expression RELATIONAL_OP $@27 simple_expression .
+   86 simple_expression: simple_expression . ADD_OP $@28 term
+
+    ADD_OP  shift, and go to state 150
+
+    $default  reduce using rule 83 (expression)
+
+
+State 220
+
+   86 simple_expression: simple_expression ADD_OP $@28 term .
+   89 term: term . MUL_OP $@29 factor
+
+    MUL_OP  shift, and go to state 151
+
+    $default  reduce using rule 86 (simple_expression)
+
+
+State 221
+
+   89 term: term MUL_OP $@29 factor .
+
+    $default  reduce using rule 89 (term)
+
+
+State 222
+
+  151 compound_statement: _BEGIN $@47 statement rept_statement END .
+
+    $default  reduce using rule 151 (compound_statement)
+
+
+State 223
+
+  161 while_stat: WHILE $@48 expression DO $@49 . statement
+
+    IF                shift, and go to state 54
+    CASE              shift, and go to state 55
+    _BEGIN            shift, and go to state 56
+    WHILE             shift, and go to state 57
+    REPEAT            shift, and go to state 58
+    FOR               shift, and go to state 59
+    WITH              shift, and go to state 60
+    FLOAT             shift, and go to state 61
+    INT               shift, and go to state 62
+    STRING            shift, and go to state 63
+    ID                shift, and go to state 64
+    BUILTIN_FUNCTION  shift, and go to state 65
+
+    $default  reduce using rule 135 (statement)
+
+    variable               go to state 66
+    entire_variable        go to state 67
+    indexed_variable       go to state 68
+    if_statement           go to state 69
+    case_statement         go to state 70
+    statement              go to state 246
+    assignment_statement   go to state 72
+    structured_statement   go to state 73
+    compound_statement     go to state 74
+    conditional_statement  go to state 75
+    reptive_statement      go to state 76
+    while_stat             go to state 77
+    rept_stat              go to state 78
+    for_stat               go to state 79
+    with_statement         go to state 80
+    procedure_statement    go to state 81
+
+
+State 224
+
+  164 rept_stat: REPEAT $@50 statement rept_rept_stat UNTIL . $@51 expression
+
+    $default  reduce using rule 163 ($@51)
+
+    $@51  go to state 247
+
+
+State 225
+
+  166 rept_rept_stat: rept_rept_stat EOSE . statement
+
+    IF                shift, and go to state 54
+    CASE              shift, and go to state 55
+    _BEGIN            shift, and go to state 56
+    WHILE             shift, and go to state 57
+    REPEAT            shift, and go to state 58
+    FOR               shift, and go to state 59
+    WITH              shift, and go to state 60
+    FLOAT             shift, and go to state 61
+    INT               shift, and go to state 62
+    STRING            shift, and go to state 63
+    ID                shift, and go to state 64
+    BUILTIN_FUNCTION  shift, and go to state 65
+
+    $default  reduce using rule 135 (statement)
+
+    variable               go to state 66
+    entire_variable        go to state 67
+    indexed_variable       go to state 68
+    if_statement           go to state 69
+    case_statement         go to state 70
+    statement              go to state 248
+    assignment_statement   go to state 72
+    structured_statement   go to state 73
+    compound_statement     go to state 74
+    conditional_statement  go to state 75
+    reptive_statement      go to state 76
+    while_stat             go to state 77
+    rept_stat              go to state 78
+    for_stat               go to state 79
+    with_statement         go to state 80
+    procedure_statement    go to state 81
+
+
+State 226
+
+  171 for_stat: FOR $@52 ID $@53 ASSIGN . $@54 for_list DO $@55 statement
+
+    $default  reduce using rule 169 ($@54)
+
+    $@54  go to state 249
+
+
+State 227
+
+  182 variable_list_rept: variable_list_rept ',' . $@60 variable
+
+    $default  reduce using rule 181 ($@60)
+
+    $@60  go to state 250
+
+
+State 228
+
+  178 with_statement: WITH $@58 variable_list DO $@59 . statement
+
+    IF                shift, and go to state 54
+    CASE              shift, and go to state 55
+    _BEGIN            shift, and go to state 56
+    WHILE             shift, and go to state 57
+    REPEAT            shift, and go to state 58
+    FOR               shift, and go to state 59
+    WITH              shift, and go to state 60
+    FLOAT             shift, and go to state 61
+    INT               shift, and go to state 62
+    STRING            shift, and go to state 63
+    ID                shift, and go to state 64
+    BUILTIN_FUNCTION  shift, and go to state 65
+
+    $default  reduce using rule 135 (statement)
+
+    variable               go to state 66
+    entire_variable        go to state 67
+    indexed_variable       go to state 68
+    if_statement           go to state 69
+    case_statement         go to state 70
+    statement              go to state 251
+    assignment_statement   go to state 72
+    structured_statement   go to state 73
+    compound_statement     go to state 74
+    conditional_statement  go to state 75
+    reptive_statement      go to state 76
+    while_stat             go to state 77
+    rept_stat              go to state 78
+    for_stat               go to state 79
+    with_statement         go to state 80
+    procedure_statement    go to state 81
+
+
+State 229
+
+  114 actual_parameter: expression .
+
+    $default  reduce using rule 114 (actual_parameter)
+
+
+State 230
+
+  186 procedure_statement: BUILTIN_FUNCTION $@61 '(' $@62 actual_parameter . actual_parameter_list ')'
+
+    $default  reduce using rule 111 (actual_parameter_list)
+
+    actual_parameter_list  go to state 252
+
+
+State 231
+
+  103 indexed_variable: variable '[' $@32 expression ']' .
+
+    $default  reduce using rule 103 (indexed_variable)
+
+
+State 232
+
+  149 first_compound_statement: _BEGIN $@44 statement rept_statement $@45 END $@46 . '.'
+
+    '.'  shift, and go to state 253
+
+
+State 233
+
+   37 function_header: FUNCTION ID $@9 ':' $@10 return_type $@11 ';' .
+
+    $default  reduce using rule 37 (function_header)
+
+
+State 234
+
+   43 function_header: FUNCTION ID $@12 '(' $@13 formal_parameter_section_list ')' $@14 . ':' $@15 return_type $@16 ';'
+
+    ':'  shift, and go to state 254
+
+
+State 235
+
+   23 formal_parameter_section_rept: formal_parameter_section_rept ';' $@6 formal_parameter_section .
+
+    $default  reduce using rule 23 (formal_parameter_section_rept)
+
+
+State 236
+
+   71 index_type: simple_type .
+
+    $default  reduce using rule 71 (index_type)
+
+
+State 237
+
+   70 array_type: ARRAY $@21 '[' $@22 index_type . index_type_rept ']' $@23 OF $@24 type
+
+    $default  reduce using rule 72 (index_type_rept)
+
+    index_type_rept  go to state 255
+
+
+State 238
+
+   60 subrange_type: const '.' '.' $@20 const .
+
+    $default  reduce using rule 60 (subrange_type)
+
+
+State 239
+
+  118 if_statement: IF $@38 expression THEN $@39 statement . else
+
+    ELSE  shift, and go to state 256
+
+    ELSE      [reduce using rule 119 (else)]
+    $default  reduce using rule 119 (else)
+
+    else  go to state 257
+
+
+State 240
+
+  110 function_designator: ID $@35 '(' $@36 actual_parameter . actual_parameter_list ')'
+
+    $default  reduce using rule 111 (actual_parameter_list)
+
+    actual_parameter_list  go to state 258
+
+
+State 241
+
+  107 function_designator: BUILTIN_FUNCTION $@33 '(' $@34 actual_parameter . actual_parameter_list ')'
+
+    $default  reduce using rule 111 (actual_parameter_list)
+
+    actual_parameter_list  go to state 259
+
+
+State 242
+
+  124 case_list_rept: EOSE case_list_rept .
+
+    $default  reduce using rule 124 (case_list_rept)
+
+
+State 243
+
+  122 case_statement: CASE expression OF case_list_element case_list_rept END .
+
+    $default  reduce using rule 122 (case_statement)
+
+
+State 244
+
+  127 case_list_element: case_label_list ':' $@41 . statement
+
+    IF                shift, and go to state 54
+    CASE              shift, and go to state 55
+    _BEGIN            shift, and go to state 56
+    WHILE             shift, and go to state 57
+    REPEAT            shift, and go to state 58
+    FOR               shift, and go to state 59
+    WITH              shift, and go to state 60
+    FLOAT             shift, and go to state 61
+    INT               shift, and go to state 62
+    STRING            shift, and go to state 63
+    ID                shift, and go to state 64
+    BUILTIN_FUNCTION  shift, and go to state 65
+
+    $default  reduce using rule 135 (statement)
+
+    variable               go to state 66
+    entire_variable        go to state 67
+    indexed_variable       go to state 68
+    if_statement           go to state 69
+    case_statement         go to state 70
+    statement              go to state 260
+    assignment_statement   go to state 72
+    structured_statement   go to state 73
+    compound_statement     go to state 74
+    conditional_statement  go to state 75
+    reptive_statement      go to state 76
+    while_stat             go to state 77
+    rept_stat              go to state 78
+    for_stat               go to state 79
+    with_statement         go to state 80
+    procedure_statement    go to state 81
+
+
+State 245
+
+  131 case_label_rept: case_label_rept ',' . $@42 case_label
+
+    $default  reduce using rule 130 ($@42)
+
+    $@42  go to state 261
+
+
+State 246
+
+  161 while_stat: WHILE $@48 expression DO $@49 statement .
+
+    $default  reduce using rule 161 (while_stat)
+
+
+State 247
+
+  164 rept_stat: REPEAT $@50 statement rept_rept_stat UNTIL $@51 . expression
+
+    LOGICALNOT        shift, and go to state 111
+    FLOAT             shift, and go to state 61
+    INT               shift, and go to state 62
+    STRING            shift, and go to state 63
+    ID                shift, and go to state 112
+    BUILTIN_FUNCTION  shift, and go to state 113
+    '('               shift, and go to state 114
+
+    expression           go to state 262
+    simple_expression    go to state 116
+    term                 go to state 117
+    factor               go to state 118
+    variable             go to state 119
+    entire_variable      go to state 67
+    indexed_variable     go to state 68
+    function_designator  go to state 120
+
+
+State 248
+
+  166 rept_rept_stat: rept_rept_stat EOSE statement .
+
+    $default  reduce using rule 166 (rept_rept_stat)
+
+
+State 249
+
+  171 for_stat: FOR $@52 ID $@53 ASSIGN $@54 . for_list DO $@55 statement
+
+    LOGICALNOT        shift, and go to state 111
+    FLOAT             shift, and go to state 61
+    INT               shift, and go to state 62
+    STRING            shift, and go to state 63
+    ID                shift, and go to state 112
+    BUILTIN_FUNCTION  shift, and go to state 113
+    '('               shift, and go to state 114
+
+    expression           go to state 263
+    simple_expression    go to state 116
+    term                 go to state 117
+    factor               go to state 118
+    variable             go to state 119
+    entire_variable      go to state 67
+    indexed_variable     go to state 68
+    function_designator  go to state 120
+    for_list             go to state 264
+
+
+State 250
+
+  182 variable_list_rept: variable_list_rept ',' $@60 . variable
+
+    FLOAT   shift, and go to state 61
+    INT     shift, and go to state 62
+    STRING  shift, and go to state 63
+    ID      shift, and go to state 64
+
+    variable          go to state 265
+    entire_variable   go to state 67
+    indexed_variable  go to state 68
+
+
+State 251
+
+  178 with_statement: WITH $@58 variable_list DO $@59 statement .
+
+    $default  reduce using rule 178 (with_statement)
+
+
+State 252
+
+  113 actual_parameter_list: actual_parameter_list . ',' $@37 actual_parameter
+  186 procedure_statement: BUILTIN_FUNCTION $@61 '(' $@62 actual_parameter actual_parameter_list . ')'
+
+    ')'  shift, and go to state 266
+    ','  shift, and go to state 267
+
+
+State 253
+
+  149 first_compound_statement: _BEGIN $@44 statement rept_statement $@45 END $@46 '.' .
+
+    $default  reduce using rule 149 (first_compound_statement)
+
+
+State 254
+
+   43 function_header: FUNCTION ID $@12 '(' $@13 formal_parameter_section_list ')' $@14 ':' . $@15 return_type $@16 ';'
+
+    $default  reduce using rule 41 ($@15)
+
+    $@15  go to state 268
+
+
+State 255
+
+   70 array_type: ARRAY $@21 '[' $@22 index_type index_type_rept . ']' $@23 OF $@24 type
+   74 index_type_rept: index_type_rept . ',' $@25 simple_type
+
+    ']'  shift, and go to state 269
+    ','  shift, and go to state 270
+
+
+State 256
+
+  121 else: ELSE . $@40 statement
+
+    $default  reduce using rule 120 ($@40)
+
+    $@40  go to state 271
+
+
+State 257
+
+  118 if_statement: IF $@38 expression THEN $@39 statement else .
+
+    $default  reduce using rule 118 (if_statement)
+
+
+State 258
+
+  110 function_designator: ID $@35 '(' $@36 actual_parameter actual_parameter_list . ')'
+  113 actual_parameter_list: actual_parameter_list . ',' $@37 actual_parameter
+
+    ')'  shift, and go to state 272
+    ','  shift, and go to state 267
+
+
+State 259
+
+  107 function_designator: BUILTIN_FUNCTION $@33 '(' $@34 actual_parameter actual_parameter_list . ')'
+  113 actual_parameter_list: actual_parameter_list . ',' $@37 actual_parameter
+
+    ')'  shift, and go to state 273
+    ','  shift, and go to state 267
+
+
+State 260
+
+  127 case_list_element: case_label_list ':' $@41 statement .
+
+    $default  reduce using rule 127 (case_list_element)
+
+
+State 261
+
+  131 case_label_rept: case_label_rept ',' $@42 . case_label
+
+    INT     shift, and go to state 181
+    STRING  shift, and go to state 182
+    ID      shift, and go to state 183
+
+    case_label  go to state 274
+
+
+State 262
+
+  164 rept_stat: REPEAT $@50 statement rept_rept_stat UNTIL $@51 expression .
+
+    $default  reduce using rule 164 (rept_stat)
+
+
+State 263
+
+  173 for_list: expression . TO $@56 expression
+  175         | expression . DOWNTO $@57 expression
+
+    TO      shift, and go to state 275
+    DOWNTO  shift, and go to state 276
+
+
+State 264
+
+  171 for_stat: FOR $@52 ID $@53 ASSIGN $@54 for_list . DO $@55 statement
+
+    DO  shift, and go to state 277
+
+
+State 265
+
+  103 indexed_variable: variable . '[' $@32 expression ']'
+  182 variable_list_rept: variable_list_rept ',' $@60 variable .
+
+    '['  shift, and go to state 129
+
+    $default  reduce using rule 182 (variable_list_rept)
+
+
+State 266
+
+  186 procedure_statement: BUILTIN_FUNCTION $@61 '(' $@62 actual_parameter actual_parameter_list ')' .
+
+    $default  reduce using rule 186 (procedure_statement)
+
+
+State 267
+
+  113 actual_parameter_list: actual_parameter_list ',' . $@37 actual_parameter
+
+    $default  reduce using rule 112 ($@37)
+
+    $@37  go to state 278
+
+
+State 268
+
+   43 function_header: FUNCTION ID $@12 '(' $@13 formal_parameter_section_list ')' $@14 ':' $@15 . return_type $@16 ';'
+
+    ARRAY  shift, and go to state 95
+    TYPE   shift, and go to state 99
+
+    return_type      go to state 279
+    type_identifier  go to state 165
+    structured_type  go to state 166
+    array_type       go to state 108
+
+
+State 269
+
+   70 array_type: ARRAY $@21 '[' $@22 index_type index_type_rept ']' . $@23 OF $@24 type
+
+    $default  reduce using rule 68 ($@23)
+
+    $@23  go to state 280
+
+
+State 270
+
+   74 index_type_rept: index_type_rept ',' . $@25 simple_type
+
+    $default  reduce using rule 73 ($@25)
+
+    $@25  go to state 281
+
+
+State 271
+
+  121 else: ELSE $@40 . statement
+
+    IF                shift, and go to state 54
+    CASE              shift, and go to state 55
+    _BEGIN            shift, and go to state 56
+    WHILE             shift, and go to state 57
+    REPEAT            shift, and go to state 58
+    FOR               shift, and go to state 59
+    WITH              shift, and go to state 60
+    FLOAT             shift, and go to state 61
+    INT               shift, and go to state 62
+    STRING            shift, and go to state 63
+    ID                shift, and go to state 64
+    BUILTIN_FUNCTION  shift, and go to state 65
+
+    $default  reduce using rule 135 (statement)
+
+    variable               go to state 66
+    entire_variable        go to state 67
+    indexed_variable       go to state 68
+    if_statement           go to state 69
+    case_statement         go to state 70
+    statement              go to state 282
+    assignment_statement   go to state 72
+    structured_statement   go to state 73
+    compound_statement     go to state 74
+    conditional_statement  go to state 75
+    reptive_statement      go to state 76
+    while_stat             go to state 77
+    rept_stat              go to state 78
+    for_stat               go to state 79
+    with_statement         go to state 80
+    procedure_statement    go to state 81
+
+
+State 272
+
+  110 function_designator: ID $@35 '(' $@36 actual_parameter actual_parameter_list ')' .
+
+    $default  reduce using rule 110 (function_designator)
+
+
+State 273
+
+  107 function_designator: BUILTIN_FUNCTION $@33 '(' $@34 actual_parameter actual_parameter_list ')' .
+
+    $default  reduce using rule 107 (function_designator)
+
+
+State 274
+
+  131 case_label_rept: case_label_rept ',' $@42 case_label .
+
+    $default  reduce using rule 131 (case_label_rept)
+
+
+State 275
+
+  173 for_list: expression TO . $@56 expression
+
+    $default  reduce using rule 172 ($@56)
+
+    $@56  go to state 283
+
+
+State 276
+
+  175 for_list: expression DOWNTO . $@57 expression
+
+    $default  reduce using rule 174 ($@57)
+
+    $@57  go to state 284
+
+
+State 277
+
+  171 for_stat: FOR $@52 ID $@53 ASSIGN $@54 for_list DO . $@55 statement
+
+    $default  reduce using rule 170 ($@55)
+
+    $@55  go to state 285
+
+
+State 278
+
+  113 actual_parameter_list: actual_parameter_list ',' $@37 . actual_parameter
+
+    LOGICALNOT        shift, and go to state 111
+    FLOAT             shift, and go to state 61
+    INT               shift, and go to state 62
+    STRING            shift, and go to state 63
+    ID                shift, and go to state 112
+    BUILTIN_FUNCTION  shift, and go to state 113
+    '('               shift, and go to state 114
+
+    expression           go to state 229
+    simple_expression    go to state 116
+    term                 go to state 117
+    factor               go to state 118
+    variable             go to state 119
+    entire_variable      go to state 67
+    indexed_variable     go to state 68
+    function_designator  go to state 120
+    actual_parameter     go to state 286
+
+
+State 279
+
+   43 function_header: FUNCTION ID $@12 '(' $@13 formal_parameter_section_list ')' $@14 ':' $@15 return_type . $@16 ';'
+
+    $default  reduce using rule 42 ($@16)
+
+    $@16  go to state 287
+
+
+State 280
+
+   70 array_type: ARRAY $@21 '[' $@22 index_type index_type_rept ']' $@23 . OF $@24 type
+
+    OF  shift, and go to state 288
+
+
+State 281
+
+   74 index_type_rept: index_type_rept ',' $@25 . simple_type
+
+    FLOAT  shift, and go to state 96
+    INT    shift, and go to state 97
+    ID     shift, and go to state 98
+    TYPE   shift, and go to state 99
+    '('    shift, and go to state 100
+
+    simple_type      go to state 289
+    scalar_type      go to state 103
+    subrange_type    go to state 104
+    const            go to state 105
+    type_identifier  go to state 106
+
+
+State 282
+
+  121 else: ELSE $@40 statement .
+
+    $default  reduce using rule 121 (else)
+
+
+State 283
+
+  173 for_list: expression TO $@56 . expression
+
+    LOGICALNOT        shift, and go to state 111
+    FLOAT             shift, and go to state 61
+    INT               shift, and go to state 62
+    STRING            shift, and go to state 63
+    ID                shift, and go to state 112
+    BUILTIN_FUNCTION  shift, and go to state 113
+    '('               shift, and go to state 114
+
+    expression           go to state 290
+    simple_expression    go to state 116
+    term                 go to state 117
+    factor               go to state 118
+    variable             go to state 119
+    entire_variable      go to state 67
+    indexed_variable     go to state 68
+    function_designator  go to state 120
+
+
+State 284
+
+  175 for_list: expression DOWNTO $@57 . expression
+
+    LOGICALNOT        shift, and go to state 111
+    FLOAT             shift, and go to state 61
+    INT               shift, and go to state 62
+    STRING            shift, and go to state 63
+    ID                shift, and go to state 112
+    BUILTIN_FUNCTION  shift, and go to state 113
+    '('               shift, and go to state 114
+
+    expression           go to state 291
+    simple_expression    go to state 116
+    term                 go to state 117
+    factor               go to state 118
+    variable             go to state 119
+    entire_variable      go to state 67
+    indexed_variable     go to state 68
+    function_designator  go to state 120
+
+
+State 285
+
+  171 for_stat: FOR $@52 ID $@53 ASSIGN $@54 for_list DO $@55 . statement
+
+    IF                shift, and go to state 54
+    CASE              shift, and go to state 55
+    _BEGIN            shift, and go to state 56
+    WHILE             shift, and go to state 57
+    REPEAT            shift, and go to state 58
+    FOR               shift, and go to state 59
+    WITH              shift, and go to state 60
+    FLOAT             shift, and go to state 61
+    INT               shift, and go to state 62
+    STRING            shift, and go to state 63
+    ID                shift, and go to state 64
+    BUILTIN_FUNCTION  shift, and go to state 65
+
+    $default  reduce using rule 135 (statement)
+
+    variable               go to state 66
+    entire_variable        go to state 67
+    indexed_variable       go to state 68
+    if_statement           go to state 69
+    case_statement         go to state 70
+    statement              go to state 292
+    assignment_statement   go to state 72
+    structured_statement   go to state 73
+    compound_statement     go to state 74
+    conditional_statement  go to state 75
+    reptive_statement      go to state 76
+    while_stat             go to state 77
+    rept_stat              go to state 78
+    for_stat               go to state 79
+    with_statement         go to state 80
+    procedure_statement    go to state 81
+
+
+State 286
+
+  113 actual_parameter_list: actual_parameter_list ',' $@37 actual_parameter .
+
+    $default  reduce using rule 113 (actual_parameter_list)
+
+
+State 287
+
+   43 function_header: FUNCTION ID $@12 '(' $@13 formal_parameter_section_list ')' $@14 ':' $@15 return_type $@16 . ';'
+
+    ';'  shift, and go to state 293
+
+
+State 288
+
+   70 array_type: ARRAY $@21 '[' $@22 index_type index_type_rept ']' $@23 OF . $@24 type
+
+    $default  reduce using rule 69 ($@24)
+
+    $@24  go to state 294
+
+
+State 289
+
+   74 index_type_rept: index_type_rept ',' $@25 simple_type .
+
+    $default  reduce using rule 74 (index_type_rept)
+
+
+State 290
+
+  173 for_list: expression TO $@56 expression .
+
+    $default  reduce using rule 173 (for_list)
+
+
+State 291
+
+  175 for_list: expression DOWNTO $@57 expression .
+
+    $default  reduce using rule 175 (for_list)
+
+
+State 292
+
+  171 for_stat: FOR $@52 ID $@53 ASSIGN $@54 for_list DO $@55 statement .
+
+    $default  reduce using rule 171 (for_stat)
+
+
+State 293
+
+   43 function_header: FUNCTION ID $@12 '(' $@13 formal_parameter_section_list ')' $@14 ':' $@15 return_type $@16 ';' .
+
+    $default  reduce using rule 43 (function_header)
+
+
+State 294
+
+   70 array_type: ARRAY $@21 '[' $@22 index_type index_type_rept ']' $@23 OF $@24 . type
+
+    ARRAY  shift, and go to state 95
+    FLOAT  shift, and go to state 96
+    INT    shift, and go to state 97
+    ID     shift, and go to state 98
+    TYPE   shift, and go to state 99
+    '('    shift, and go to state 100
+
+    type             go to state 295
+    simple_type      go to state 102
+    scalar_type      go to state 103
+    subrange_type    go to state 104
+    const            go to state 105
+    type_identifier  go to state 106
+    structured_type  go to state 107
+    array_type       go to state 108
+
+
+State 295
+
+   70 array_type: ARRAY $@21 '[' $@22 index_type index_type_rept ']' $@23 OF $@24 type .
+
+    $default  reduce using rule 70 (array_type)

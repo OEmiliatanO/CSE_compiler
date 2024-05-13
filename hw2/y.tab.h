@@ -50,93 +50,99 @@ extern int yydebug;
   enum yytokentype
   {
     PROGRAM = 258,
-    ARRAY = 259,
-    IF = 260,
-    THEN = 261,
-    ELSE = 262,
-    CASE = 263,
-    OF = 264,
-    END = 265,
-    ASSIGN = 266,
-    _BEGIN = 267,
-    WHILE = 268,
-    DO = 269,
-    REPEAT = 270,
-    UNTIL = 271,
-    FOR = 272,
-    TO = 273,
-    DOWNTO = 274,
-    BREAK = 275,
-    CONTINUE = 276,
-    VAR = 277,
-    LOGICALNOT = 278,
-    NEWLINE = 279,
-    WITH = 280,
-    WRITE = 281,
-    WRITELN = 282,
-    READ = 283,
-    FLOAT = 284,
-    INT = 285,
-    STRING = 286,
-    ID = 287,
-    RELATIONAL_OP = 288,
-    ADD_OP = 289,
-    MUL_OP = 290,
-    TYPE = 291,
-    BUILTIN_FUNCTION = 292,
-    COMMENT = 293
+    FUNCTION = 259,
+    PROCEDURE = 260,
+    ARRAY = 261,
+    IF = 262,
+    THEN = 263,
+    ELSE = 264,
+    CASE = 265,
+    OF = 266,
+    END = 267,
+    ASSIGN = 268,
+    _BEGIN = 269,
+    WHILE = 270,
+    DO = 271,
+    REPEAT = 272,
+    UNTIL = 273,
+    FOR = 274,
+    TO = 275,
+    DOWNTO = 276,
+    BREAK = 277,
+    CONTINUE = 278,
+    VAR = 279,
+    LOGICALNOT = 280,
+    NEWLINE = 281,
+    WITH = 282,
+    WRITE = 283,
+    WRITELN = 284,
+    READ = 285,
+    FLOAT = 286,
+    INT = 287,
+    STRING = 288,
+    ID = 289,
+    RELATIONAL_OP = 290,
+    ADD_OP = 291,
+    MUL_OP = 292,
+    TYPE = 293,
+    BUILTIN_FUNCTION = 294,
+    COMMENT = 295,
+    END_OF_FILE = 296
   };
 #endif
 /* Tokens.  */
 #define PROGRAM 258
-#define ARRAY 259
-#define IF 260
-#define THEN 261
-#define ELSE 262
-#define CASE 263
-#define OF 264
-#define END 265
-#define ASSIGN 266
-#define _BEGIN 267
-#define WHILE 268
-#define DO 269
-#define REPEAT 270
-#define UNTIL 271
-#define FOR 272
-#define TO 273
-#define DOWNTO 274
-#define BREAK 275
-#define CONTINUE 276
-#define VAR 277
-#define LOGICALNOT 278
-#define NEWLINE 279
-#define WITH 280
-#define WRITE 281
-#define WRITELN 282
-#define READ 283
-#define FLOAT 284
-#define INT 285
-#define STRING 286
-#define ID 287
-#define RELATIONAL_OP 288
-#define ADD_OP 289
-#define MUL_OP 290
-#define TYPE 291
-#define BUILTIN_FUNCTION 292
-#define COMMENT 293
+#define FUNCTION 259
+#define PROCEDURE 260
+#define ARRAY 261
+#define IF 262
+#define THEN 263
+#define ELSE 264
+#define CASE 265
+#define OF 266
+#define END 267
+#define ASSIGN 268
+#define _BEGIN 269
+#define WHILE 270
+#define DO 271
+#define REPEAT 272
+#define UNTIL 273
+#define FOR 274
+#define TO 275
+#define DOWNTO 276
+#define BREAK 277
+#define CONTINUE 278
+#define VAR 279
+#define LOGICALNOT 280
+#define NEWLINE 281
+#define WITH 282
+#define WRITE 283
+#define WRITELN 284
+#define READ 285
+#define FLOAT 286
+#define INT 287
+#define STRING 288
+#define ID 289
+#define RELATIONAL_OP 290
+#define ADD_OP 291
+#define MUL_OP 292
+#define TYPE 293
+#define BUILTIN_FUNCTION 294
+#define COMMENT 295
+#define END_OF_FILE 296
 
 /* Value type.  */
 #if ! defined YYSTYPE && ! defined YYSTYPE_IS_DECLARED
 union YYSTYPE
 {
-#line 41 "B103040012.y"
+#line 42 "B103040012.y"
 
     int 	intVal;
     char    charVal;
     float 	floatVal;
     char*   stringVal;
 
-#line 140 "y.tab.h"
+#line 146 "y.tab.h"
 
 };
 typedef union YYSTYPE YYSTYPE;
