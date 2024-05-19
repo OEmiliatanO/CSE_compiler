@@ -25,7 +25,6 @@ char current_type[30];
 
 const char * regular_type(const char* type)
 {
-    //"integer"|"double"|"string"|"float"|"real"|"single"|"byte"|"longint"|"word"|"longword"|"shortint"|"cardinal"|"object"
     if (strcmp(type, "integer") == 0 || strcmp(type, "i") == 0
         || strcmp(type, "byte") == 0
         || strcmp(type, "longint") == 0
@@ -64,18 +63,24 @@ void yyerror(const char* message) {
 %token END_OF_FILE
 %%
 
+// main program
+// block contains the procedure, function, variable declaration, and the main program
 program : PROGRAM ID ';' { printf("Line %02lu: %s %s;", _line, "program", $2); } block 
         | error ID ';' { printf("%s;", $2); } block;
 
 block : procedure_function_decl_part var_decl_part statement_part | error var_decl_part statement_part;
+
+// for procedure, function declaration
 block_ : procedure_function_decl_part var_decl_part statement_part_ | error var_decl_part statement_part_;
 
+// procedure and function declaration
 procedure_function_decl_part: | procedure_function_decl_part procedure_or_function ';' { printf(";"); };
 procedure_or_function: procedure_decl | function_decl;
 procedure_decl: procedure_header block_;
 procedure_header: procedure_header_common ';' { printf(";"); }
                 | procedure_header_common
                 '(' { printf("("); } formal_parameter_section_list ')' { printf(")"); } ';' { printf(";"); };
+// register the procedure identity
 procedure_header_common: PROCEDURE { printf("procedure "); } ID
                         {
                             printf("%s", $3);
@@ -88,6 +93,7 @@ parameter_group: ID_list ':' { printf(":"); } parameter_type { memset(current_ty
 parameter_type: type_identifier | structured_type;
 return_type: type_identifier | structured_type;
 function_decl: function_header block_;
+// register the function identity
 function_header: FUNCTION ID
                 {
                     printf("function %s", $2);
@@ -113,13 +119,15 @@ function_header: FUNCTION ID
                 }
                 ';' { printf(";"); };
 
+// variable declaration
 var_decl_part : | VAR { printf("%s", "var "); var_declaration = 1; } var_decl var_decl_rept EOSE { var_declaration = 0; };
 var_decl : ID_list ':' { printf(" : "); } type
          {
             while (!empty()) 
             { 
                 char id[30]; 
-                strcpy(id, top()); 
+                strcpy(id, top());
+                // check if the identifier was delcaraed
                 if (exists(id))
                 {
                     char buf[100];
@@ -168,8 +176,8 @@ type_identifier : TYPE
                     strcat(current_type, regular_type($1));
                 };
 
+// array type
 structured_type : array_type;
-
 array_type : ARRAY 
             { 
                 printf("array"); 
@@ -191,9 +199,11 @@ array_type : ARRAY
                 strcpy(current_type+1, buf);
                 dimension = 0; 
             } OF { printf(" of "); } type;
+// record how many dimension of this array
 index_type : simple_type { ++dimension; };
 index_type_rept : | index_type_rept ',' { printf(","); ++dimension; } simple_type;
 
+// record all the IDs (push to a stack)
 ID_list : ID 
         { 
             printf("%s", $1); 
@@ -205,23 +215,28 @@ ID_list_rept : | ID_list_rept ',' ID
                 if (var_declaration) push($3);
              };
 
+// first compound statement is ended with dot
 statement_part : first_compound_statement;
+// this is ended with semicolon
 statement_part_ : compound_statement;
 
+// relational operation has the lowest priority
 expression : simple_expression 
            | simple_expression RELATIONAL_OP { printf(" %s ", $2); } simple_expression 
            {
+                // type-check
                 node_t b = exp_top(); exp_pop();
                 node_t a = exp_top(); exp_pop();
-                if ((strcmp(a.type, "i") != 0 && strcmp(a.type, "f") != 0) 
+                if ((strcmp(a.type, "i") != 0 && strcmp(a.type, "f") != 0)        // (a is not integer or float) or (b is not integer or float)
                  || (strcmp(b.type, "i") != 0 && strcmp(b.type, "f") != 0))
-                    if (!(strcmp(a.type, "s") == 0 && strcmp(b.type, "s") == 0)
-                     || !(strcmp(a.type, "c") == 0 && strcmp(b.type, "c") == 0))
+                    if (!(strcmp(a.type, "s") == 0 && strcmp(b.type, "s") == 0)   // a and b are not strings
+                     || !(strcmp(a.type, "c") == 0 && strcmp(b.type, "c") == 0))  // or chars
                     {
                         char buf[100];
                         sprintf(buf, "%sERROR%s: %s and %s type cannot use '%s' operation.", KRED, KWHT, cpretty(a.type), cpretty(b.type), $2);
                         yyerror(buf);
                     }
+                // no matter what, treat the result as integer
                 exp_push(KIND_NUM, "i");
            };
 
@@ -231,14 +246,14 @@ simple_expression : term
                     node_t b = exp_top(); exp_pop();
                     node_t a = exp_top(); exp_pop();
                     if ((strcmp(a.type, "i") != 0 && strcmp(a.type, "f") != 0)
-                     || (strcmp(b.type, "i") != 0 && strcmp(b.type, "f") != 0))
+                     || (strcmp(b.type, "i") != 0 && strcmp(b.type, "f") != 0)) // (a is not integer or float) or (b is not integer or float)
                     {
                         char buf[100];
                         sprintf(buf, "%sERROR%s: %s and %s type cannot use '%s' operation.", KRED, KWHT, cpretty(a.type), cpretty(b.type), $2);
                         yyerror(buf);
                         exp_push(KIND_NUM, "i");
                     }
-                    else if (strcmp(a.type, "f") == 0 || strcmp(b.type, "f") == 0)
+                    else if (strcmp(a.type, "f") == 0 || strcmp(b.type, "f") == 0) // widening conversion
                         exp_push(KIND_NUM, "f");
                     else
                         exp_push(KIND_NUM, "i");
@@ -250,7 +265,7 @@ term : factor
         node_t b = exp_top(); exp_pop();
         node_t a = exp_top(); exp_pop();
         if ((strcmp(a.type, "i") != 0 && strcmp(a.type, "f") != 0)
-         || (strcmp(b.type, "i") != 0 && strcmp(b.type, "f") != 0))
+         || (strcmp(b.type, "i") != 0 && strcmp(b.type, "f") != 0)) // (a is not integer or float) or (b is not integer or float)
         {
             char buf[100];
             sprintf(buf, "%sERROR%s: %s and %s type cannot use '%s' operation.", KRED, KWHT, cpretty(a.type), cpretty(b.type), $2);
@@ -267,7 +282,7 @@ factor : variable
        | LOGICALNOT { printf(" not "); } factor 
         { 
             node_t a = exp_top(); exp_pop();
-            if (strcmp(a.type, "i") != 0)
+            if (strcmp(a.type, "i") != 0) // a is not integer
             {
                 char buf[100];
                 sprintf(buf, "%sERROR%s: %s cannot be NOTed.", KRED, KWHT, cpretty(a.type));
@@ -277,6 +292,8 @@ factor : variable
         }
        | function_designator;
 
+// single variable like integer, float, string, identifier
+// or array variable
 variable : entire_variable 
          | indexed_variable;
 
@@ -320,6 +337,7 @@ indexed_variable : variable '[' { printf("["); } expression ']'
                     }
                     else
                     {
+                        // de-reference the array
                         sscanf(array.type+1, "%d", &dimension);
                         --dimension;
                         if (dimension == 0)
@@ -339,6 +357,7 @@ indexed_variable : variable '[' { printf("["); } expression ']'
                     exp_push(KIND_NUM, array.type);
                  };
 
+// function call
 function_designator : BUILTIN_FUNCTION
                     {
                         printf("%s", $1);
@@ -383,14 +402,17 @@ function_designator : BUILTIN_FUNCTION
                                 exp_push(KIND_NUM, _type+1);
                         }
                     };
+// parameters
 actual_parameter_list : | actual_parameter_list ',' { printf(", "); } actual_parameter;
 actual_parameter : expression;
 
 EOSE : ';' { printf(";"); };
 
+// if else statement
 if_statement : IF { printf("if "); } expression THEN { printf(" then "); } statement else | error statement else; 
 else: | ELSE { printf("else "); } statement | error statement;
 
+// case statement
 case_statement : CASE expression OF case_list_element case_list_rept END;
 case_list_rept : | EOSE case_list_rept;
 case_list_element : | case_label_list ':' { printf(":"); } statement;
@@ -398,21 +420,23 @@ case_label_list : case_label case_label_rept;
 case_label_rept : | case_label_rept ',' { printf(","); } case_label;
 case_label : INT | STRING | ID { printf("%s", $1); };
 
+// general statment
 statement : | structured_statement | assignment_statement | procedure_statement;
 
 assignment_statement : variable ASSIGN { printf(" := "); } expression
                      {
                         node_t expr = exp_top(); exp_pop();
                         node_t var  = exp_top(); exp_pop();
+                        // type check
                         if (var.type[0] != expr.type[0])
                         {
-                            if (var.type[0] == 'i' && expr.type[0] == 'f')
+                            if (var.type[0] == 'i' && expr.type[0] == 'f') // narrowing conversion
                             {
                                 char buf[100];
                                 sprintf(buf, "%sWARNING%s: Narrowing conversion form float to int.", KRED, KWHT);
                                 yyerror(buf);
                             }
-                            else
+                            else // not match
                             {
                                 char buf[100];
                                 sprintf(buf, "%sERROR%s: Cannot convert %s to %s.", KRED, KWHT, cpretty(expr.type), cpretty(var.type));
@@ -420,7 +444,7 @@ assignment_statement : variable ASSIGN { printf(" := "); } expression
                             }
                         }
                      }
-                     | variable error expression
+                     | variable error expression // same as the above, but this is error recovery.
                      {
                         node_t expr = exp_top(); exp_pop();
                         node_t var  = exp_top(); exp_pop();
@@ -448,6 +472,7 @@ compound_statement : _BEGIN { printf("begin"); } statement rept_statement END { 
 
 conditional_statement : if_statement | case_statement;
 
+// for, while, repeat statement
 rept_statement : | rept_statement EOSE statement;
 
 reptive_statement : while_stat | rept_stat | for_stat;
@@ -468,13 +493,14 @@ variable_list: variable variable_list_rept;
 
 variable_list_rept : | variable_list_rept ',' { printf(", "); } variable;
 
+// function call statement
 procedure_statement : BUILTIN_FUNCTION { printf("%s", $1); } 
                     | BUILTIN_FUNCTION { printf("%s", $1); } '(' { printf("("); } actual_parameter actual_parameter_list ')' { printf(")"); }
                     | ID { printf("%s", $1); } '(' { printf("("); } actual_parameter actual_parameter_list ')' 
                     {
                         printf(")");
 
-                        if (exists($1) == 0)
+                        if (exists($1) == 0) // check if the function exists
                         {
                             char buf[100];
                             sprintf(buf, "%sERROR%s: Function %s was not declared in this scope.", KRED, KWHT, $1);

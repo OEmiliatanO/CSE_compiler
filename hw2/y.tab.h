@@ -1,8 +1,8 @@
-/* A Bison parser, made by GNU Bison 3.5.1.  */
+/* A Bison parser, made by GNU Bison 3.8.2.  */
 
 /* Bison interface for Yacc-like parsers in C
 
-   Copyright (C) 1984, 1989-1990, 2000-2015, 2018-2020 Free Software Foundation,
+   Copyright (C) 1984, 1989-1990, 2000-2015, 2018-2021 Free Software Foundation,
    Inc.
 
    This program is free software: you can redistribute it and/or modify
@@ -16,7 +16,7 @@
    GNU General Public License for more details.
 
    You should have received a copy of the GNU General Public License
-   along with this program.  If not, see <http://www.gnu.org/licenses/>.  */
+   along with this program.  If not, see <https://www.gnu.org/licenses/>.  */
 
 /* As a special exception, you may create a larger work that contains
    part or all of the Bison parser skeleton and distribute that work
@@ -31,8 +31,9 @@
    This special exception was added by the Free Software Foundation in
    version 2.2 of Bison.  */
 
-/* Undocumented macros, especially those whose name start with YY_,
-   are private implementation details.  Do not rely on them.  */
+/* DO NOT RELY ON FEATURES THAT ARE NOT DOCUMENTED in the manual,
+   especially those whose name start with YY_ or yy_.  They are
+   private implementation details that can be changed or removed.  */
 
 #ifndef YY_YY_Y_TAB_H_INCLUDED
 # define YY_YY_Y_TAB_H_INCLUDED
@@ -44,53 +45,62 @@
 extern int yydebug;
 #endif
 
-/* Token type.  */
+/* Token kinds.  */
 #ifndef YYTOKENTYPE
 # define YYTOKENTYPE
   enum yytokentype
   {
-    PROGRAM = 258,
-    FUNCTION = 259,
-    PROCEDURE = 260,
-    ARRAY = 261,
-    IF = 262,
-    THEN = 263,
-    ELSE = 264,
-    CASE = 265,
-    OF = 266,
-    END = 267,
-    ASSIGN = 268,
-    _BEGIN = 269,
-    WHILE = 270,
-    DO = 271,
-    REPEAT = 272,
-    UNTIL = 273,
-    FOR = 274,
-    TO = 275,
-    DOWNTO = 276,
-    BREAK = 277,
-    CONTINUE = 278,
-    VAR = 279,
-    LOGICALNOT = 280,
-    NEWLINE = 281,
-    WITH = 282,
-    WRITE = 283,
-    WRITELN = 284,
-    READ = 285,
-    FLOAT = 286,
-    INT = 287,
-    STRING = 288,
-    ID = 289,
-    RELATIONAL_OP = 290,
-    ADD_OP = 291,
-    MUL_OP = 292,
-    TYPE = 293,
-    BUILTIN_FUNCTION = 294,
-    COMMENT = 295,
-    END_OF_FILE = 296
+    YYEMPTY = -2,
+    YYEOF = 0,                     /* "end of file"  */
+    YYerror = 256,                 /* error  */
+    YYUNDEF = 257,                 /* "invalid token"  */
+    PROGRAM = 258,                 /* PROGRAM  */
+    FUNCTION = 259,                /* FUNCTION  */
+    PROCEDURE = 260,               /* PROCEDURE  */
+    ARRAY = 261,                   /* ARRAY  */
+    IF = 262,                      /* IF  */
+    THEN = 263,                    /* THEN  */
+    ELSE = 264,                    /* ELSE  */
+    CASE = 265,                    /* CASE  */
+    OF = 266,                      /* OF  */
+    END = 267,                     /* END  */
+    ASSIGN = 268,                  /* ASSIGN  */
+    _BEGIN = 269,                  /* _BEGIN  */
+    WHILE = 270,                   /* WHILE  */
+    DO = 271,                      /* DO  */
+    REPEAT = 272,                  /* REPEAT  */
+    UNTIL = 273,                   /* UNTIL  */
+    FOR = 274,                     /* FOR  */
+    TO = 275,                      /* TO  */
+    DOWNTO = 276,                  /* DOWNTO  */
+    BREAK = 277,                   /* BREAK  */
+    CONTINUE = 278,                /* CONTINUE  */
+    VAR = 279,                     /* VAR  */
+    LOGICALNOT = 280,              /* LOGICALNOT  */
+    NEWLINE = 281,                 /* NEWLINE  */
+    WITH = 282,                    /* WITH  */
+    WRITE = 283,                   /* WRITE  */
+    WRITELN = 284,                 /* WRITELN  */
+    READ = 285,                    /* READ  */
+    FLOAT = 286,                   /* FLOAT  */
+    INT = 287,                     /* INT  */
+    STRING = 288,                  /* STRING  */
+    ID = 289,                      /* ID  */
+    RELATIONAL_OP = 290,           /* RELATIONAL_OP  */
+    ADD_OP = 291,                  /* ADD_OP  */
+    MUL_OP = 292,                  /* MUL_OP  */
+    TYPE = 293,                    /* TYPE  */
+    BUILTIN_FUNCTION = 294,        /* BUILTIN_FUNCTION  */
+    COMMENT = 295,                 /* COMMENT  */
+    END_OF_FILE = 296              /* END_OF_FILE  */
   };
+  typedef enum yytokentype yytoken_kind_t;
 #endif
-/* Tokens.  */
+/* Token kinds.  */
+#define YYEMPTY -2
+#define YYEOF 0
+#define YYerror 256
+#define YYUNDEF 257
 #define PROGRAM 258
 #define FUNCTION 259
 #define PROCEDURE 260
@@ -135,14 +145,14 @@ extern int yydebug;
 #if ! defined YYSTYPE && ! defined YYSTYPE_IS_DECLARED
 union YYSTYPE
 {
-#line 51 "B103040012.y"
+#line 50 "B103040012.y"
 
     int 	intVal;
     char    charVal;
     float 	floatVal;
     char*   stringVal;
 
-#line 146 "y.tab.h"
+#line 156 "y.tab.h"
 
 };
 typedef union YYSTYPE YYSTYPE;
@@ -153,6 +163,8 @@ typedef union YYSTYPE YYSTYPE;
 
 extern YYSTYPE yylval;
 
+
 int yyparse (void);
+
 
 #endif /* !YY_YY_Y_TAB_H_INCLUDED  */
